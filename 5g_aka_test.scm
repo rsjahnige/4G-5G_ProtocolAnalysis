@@ -1,42 +1,54 @@
-(herald "Pake 0"
+(herald "5G AKA Round 1 suci "
+    (comment "First attempt for modeling 5G AKA")
 	)
 
-(defmacro (sKey a b na nb) 
-  (hash (ltk a b) a b na nb)
-  )
+(defmacro (AUTN sqn rand key)
+    (cat (hash sqn (hash key rand)) (hash sqn rand key))
+)
 
-(defprotocol pake0 basic 
-  (defrole alice
-    (vars (na nb data) (a b name))
+(defprotocol 5G-AKA basic
+
+  (defrole UE
+    (vars (supi RAND data) (homename servername name))
     (trace
-     (send na)
-     (recv nb)
-     (send (hash (sKey a b na nb)))
-     (recv (hash (hash (sKey a b na nb)) (sKey a b na nb)))
+        (send (enc supi (pubk homename)))
+
      )
     )
 
-  (defrole bob
-    (vars (na nb data) (a b name))
+  (defrole ServingNetwork
+    (vars (supi RAND data) (homename servername name))
     (trace
-     (recv na)
-     (send nb)
-     (recv (hash (sKey a b na nb)))
-     (send (hash (hash (sKey a b na nb)) (sKey a b na nb)))
-     )
+        (recv (enc supi (pubk homename)))
+        (send (cat (enc supi (pubk homename) servername))
+        (recv (cat RAND ))
     )
+    (non-orig seqno)
+   )
+
+   (defrole HomeNetwork
+    (vars (supi RAND data) (homename servername name) (seqno text))
+    (trace 
+        (recv (cat (enc supi (pubk homename) servername))
+        (send (cat RAND AUTN ))
+    )
+    (uniq-gen RAND)
+    (non-orig seqno)
+    
+   )
   )
 
-(defskeleton pake0
-  (vars (na data) (a b name))
-  (defstrand alice 4 (na na) (a a) (b b))
-  (uniq-orig na)
-  (pen-non-orig (ltk a b))
-  )
+(defskeleton 
+    (vars )
+    (defstrandmax )
+)
 
-(defskeleton pake0
-  (vars (nb data) (a b name))
-  (defstrand bob 4 (nb nb) (a a) (b b))
-  (uniq-orig nb)
-  (uniq-orig nb)
-  )
+(defskeleton 
+    (vars )
+    (defstrandmax )
+)
+
+(defskeleton 
+    (vars )
+    (defstrandmax )
+)()

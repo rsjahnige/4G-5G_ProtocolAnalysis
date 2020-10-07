@@ -62,7 +62,7 @@
     (vars (SUPI RAND data) (UE SN HN name) (SQN text))
     (trace 
      (recv (cat (enc SUPI (pubk HN) SN)))
-     ;; (init (cat (XRES* RAND SN (ltk UE HN)) SUPI)) ;;store XRES* and SUPI
+     (init (cat (XRES* RAND SN (ltk UE HN)) SUPI)) ;;store XRES* and SUPI
      (send (cat RAND (AUTN SQN RAND (ltk UE HN)) (HXRES* RAND SN (ltk UE HN))))
      (recv (RES* RAND SN (ltk UE HN)))
      (send (cat "Success" (KSEAF RAND SN SQN (ltk UE HN)) SUPI))

@@ -43,6 +43,10 @@
   (defrole HomeNetwork
     (vars (SUPI RAND data) (UE SN HN name) (SQN text))
     (trace (recv (enc SUPI (pubk HN) SN))
+      (init
+        (cat
+          (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
+            RAND (hash (ltk UE HN) RAND)) SUPI))
       (send
         (cat RAND
           (cat (hash SQN (hash (ltk UE HN) RAND))
@@ -83,12 +87,12 @@
   (vars (SQN text) (SUPI RAND SUPI-0 data) (UE HN SN SN-0 name))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 2 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN-0) (HN HN))
-  (precedes ((1 1) (0 1)))
+  (precedes ((1 2) (0 1)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
-  (operation encryption-test (added-strand HomeNetwork 2)
+  (operation encryption-test (added-strand HomeNetwork 3)
     (hash SQN (hash (ltk UE HN) RAND)) (0 1))
   (traces
     ((send (enc SUPI (pubk HN)))
@@ -99,6 +103,10 @@
         (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
           RAND (hash (ltk UE HN) RAND))))
     ((recv (enc SUPI-0 (pubk HN) SN-0))
+      (init
+        (cat
+          (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND))
+            SN-0 RAND (hash (ltk UE HN) RAND)) SUPI-0))
       (send
         (cat RAND
           (cat (hash SQN (hash (ltk UE HN) RAND))
@@ -181,6 +189,10 @@
   (defrole HomeNetwork
     (vars (SUPI RAND data) (UE SN HN name) (SQN text))
     (trace (recv (enc SUPI (pubk HN) SN))
+      (init
+        (cat
+          (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
+            RAND (hash (ltk UE HN) RAND)) SUPI))
       (send
         (cat RAND
           (cat (hash SQN (hash (ltk UE HN) RAND))
@@ -236,12 +248,12 @@
   (vars (SQN text) (SUPI RAND SUPI-0 data) (SN UE HN SN-0 name))
   (defstrand ServingNetwork 7 (SQN SQN) (SUPI SUPI) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 2 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN-0) (HN HN))
-  (precedes ((1 1) (0 2)))
+  (precedes ((1 2) (0 2)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
-  (operation encryption-test (added-strand HomeNetwork 2)
+  (operation encryption-test (added-strand HomeNetwork 3)
     (hash SQN (hash (ltk UE HN) RAND)) (0 2))
   (traces
     ((recv (enc SUPI (pubk HN))) (send (enc SUPI (pubk HN) SN))
@@ -267,6 +279,10 @@
             (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND))
               SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI)))
     ((recv (enc SUPI-0 (pubk HN) SN-0))
+      (init
+        (cat
+          (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND))
+            SN-0 RAND (hash (ltk UE HN) RAND)) SUPI-0))
       (send
         (cat RAND
           (cat (hash SQN (hash (ltk UE HN) RAND))
@@ -283,12 +299,12 @@
   (vars (SQN text) (SUPI RAND SUPI-0 data) (UE HN SN name))
   (defstrand ServingNetwork 7 (SQN SQN) (SUPI SUPI) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 2 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (precedes ((1 1) (0 2)))
+  (precedes ((1 2) (0 2)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
-  (operation encryption-test (displaced 2 1 HomeNetwork 2)
+  (operation encryption-test (displaced 2 1 HomeNetwork 3)
     (hash
       (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN-0
         RAND (hash (ltk UE HN) RAND)) RAND) (0 2))
@@ -316,6 +332,10 @@
             (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND))
               SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI)))
     ((recv (enc SUPI-0 (pubk HN) SN))
+      (init
+        (cat
+          (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
+            RAND (hash (ltk UE HN) RAND)) SUPI-0))
       (send
         (cat RAND
           (cat (hash SQN (hash (ltk UE HN) RAND))
@@ -332,13 +352,13 @@
   (vars (SQN text) (SUPI RAND SUPI-0 data) (SN UE HN SN-0 name))
   (defstrand ServingNetwork 7 (SQN SQN) (SUPI SUPI) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 2 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN-0) (HN HN))
   (deflistener
     (cat
       (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
         RAND (hash (ltk UE HN) RAND)) RAND))
-  (precedes ((1 1) (2 0)) ((2 1) (0 2)))
+  (precedes ((1 1) (2 0)) ((1 2) (0 2)) ((2 1) (0 2)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
   (operation encryption-test
@@ -373,6 +393,10 @@
             (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND))
               SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI)))
     ((recv (enc SUPI-0 (pubk HN) SN-0))
+      (init
+        (cat
+          (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND))
+            SN-0 RAND (hash (ltk UE HN) RAND)) SUPI-0))
       (send
         (cat RAND
           (cat (hash SQN (hash (ltk UE HN) RAND))
@@ -397,11 +421,11 @@
   (vars (SQN SQN-0 text) (SUPI RAND SUPI-0 SUPI-1 data) (UE HN SN name))
   (defstrand ServingNetwork 7 (SQN SQN) (SUPI SUPI) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 2 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
   (defstrand UserEquip 3 (SQN SQN-0) (SUPI SUPI-1) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (precedes ((1 1) (0 2)) ((1 1) (2 1)) ((2 2) (0 4)))
+  (precedes ((1 1) (2 1)) ((1 2) (0 2)) ((2 2) (0 4)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
   (operation encryption-test (added-strand UserEquip 3)
@@ -431,6 +455,10 @@
             (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND))
               SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI)))
     ((recv (enc SUPI-0 (pubk HN) SN))
+      (init
+        (cat
+          (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
+            RAND (hash (ltk UE HN) RAND)) SUPI-0))
       (send
         (cat RAND
           (cat (hash SQN (hash (ltk UE HN) RAND))
@@ -454,12 +482,12 @@
   (vars (SQN text) (SUPI RAND SUPI-0 data) (UE HN SN name))
   (defstrand ServingNetwork 7 (SQN SQN) (SUPI SUPI) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 2 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
   (deflistener
     (cat (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND
       (hash (ltk UE HN) RAND)))
-  (precedes ((1 1) (0 2)) ((1 1) (2 0)) ((2 1) (0 4)))
+  (precedes ((1 1) (2 0)) ((1 2) (0 2)) ((2 1) (0 4)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
   (operation encryption-test
@@ -492,6 +520,10 @@
             (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND))
               SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI)))
     ((recv (enc SUPI-0 (pubk HN) SN))
+      (init
+        (cat
+          (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
+            RAND (hash (ltk UE HN) RAND)) SUPI-0))
       (send
         (cat RAND
           (cat (hash SQN (hash (ltk UE HN) RAND))
@@ -516,7 +548,7 @@
     (SN UE HN SN-0 name))
   (defstrand ServingNetwork 7 (SQN SQN) (SUPI SUPI) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 2 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN-0) (HN HN))
   (deflistener
     (cat
@@ -524,7 +556,7 @@
         RAND (hash (ltk UE HN) RAND)) RAND))
   (defstrand UserEquip 3 (SQN SQN-0) (SUPI SUPI-1) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (precedes ((1 1) (3 1)) ((2 1) (0 2)) ((3 2) (2 0)))
+  (precedes ((1 1) (3 1)) ((1 2) (0 2)) ((2 1) (0 2)) ((3 2) (2 0)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
   (operation encryption-test (added-strand UserEquip 3)
@@ -554,6 +586,10 @@
             (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND))
               SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI)))
     ((recv (enc SUPI-0 (pubk HN) SN-0))
+      (init
+        (cat
+          (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND))
+            SN-0 RAND (hash (ltk UE HN) RAND)) SUPI-0))
       (send
         (cat RAND
           (cat (hash SQN (hash (ltk UE HN) RAND))
@@ -578,14 +614,14 @@
           RAND (hash (ltk UE HN) RAND)))))
   (label 9)
   (parent 6)
-  (unrealized (0 6) (3 1))
+  (unrealized (0 6) (2 0) (3 1))
   (comment "2 in cohort - 2 not yet seen"))
 
 (defskeleton AKA5G
   (vars (SQN text) (SUPI RAND SUPI-0 data) (SN UE HN SN-0 name))
   (defstrand ServingNetwork 7 (SQN SQN) (SUPI SUPI) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 2 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN-0) (HN HN))
   (deflistener
     (cat
@@ -594,7 +630,7 @@
   (deflistener
     (cat (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND
       (hash (ltk UE HN) RAND)))
-  (precedes ((1 1) (3 0)) ((2 1) (0 2)) ((3 1) (2 0)))
+  (precedes ((1 1) (3 0)) ((1 2) (0 2)) ((2 1) (0 2)) ((3 1) (2 0)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
   (operation encryption-test
@@ -627,6 +663,10 @@
             (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND))
               SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI)))
     ((recv (enc SUPI-0 (pubk HN) SN-0))
+      (init
+        (cat
+          (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND))
+            SN-0 RAND (hash (ltk UE HN) RAND)) SUPI-0))
       (send
         (cat RAND
           (cat (hash SQN (hash (ltk UE HN) RAND))
@@ -658,14 +698,14 @@
   (vars (SQN text) (SUPI RAND SUPI-0 SUPI-1 data) (UE HN SN name))
   (defstrand ServingNetwork 7 (SQN SQN) (SUPI SUPI) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 2 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (precedes ((1 1) (0 2)) ((1 1) (2 1)) ((2 2) (0 4)))
+  (precedes ((1 2) (0 2)) ((1 2) (2 1)) ((2 2) (0 4)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
-  (operation encryption-test (displaced 3 1 HomeNetwork 2)
+  (operation encryption-test (displaced 3 1 HomeNetwork 3)
     (hash SQN-0 (hash (ltk UE HN) RAND)) (2 1))
   (traces
     ((recv (enc SUPI (pubk HN))) (send (enc SUPI (pubk HN) SN))
@@ -691,6 +731,10 @@
             (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND))
               SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI)))
     ((recv (enc SUPI-0 (pubk HN) SN))
+      (init
+        (cat
+          (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
+            RAND (hash (ltk UE HN) RAND)) SUPI-0))
       (send
         (cat RAND
           (cat (hash SQN (hash (ltk UE HN) RAND))
@@ -714,12 +758,12 @@
   (vars (SQN SQN-0 text) (SUPI RAND SUPI-0 SUPI-1 data) (UE HN SN name))
   (defstrand ServingNetwork 7 (SQN SQN) (SUPI SUPI) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 2 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
   (defstrand UserEquip 3 (SQN SQN-0) (SUPI SUPI-1) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
   (deflistener (cat SQN-0 (hash (ltk UE HN) RAND)))
-  (precedes ((1 1) (0 2)) ((1 1) (3 0)) ((2 2) (0 4)) ((3 1) (2 1)))
+  (precedes ((1 1) (3 0)) ((1 2) (0 2)) ((2 2) (0 4)) ((3 1) (2 1)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
   (operation encryption-test
@@ -749,6 +793,10 @@
             (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND))
               SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI)))
     ((recv (enc SUPI-0 (pubk HN) SN))
+      (init
+        (cat
+          (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
+            RAND (hash (ltk UE HN) RAND)) SUPI-0))
       (send
         (cat RAND
           (cat (hash SQN (hash (ltk UE HN) RAND))
@@ -775,7 +823,7 @@
   (vars (SQN text) (SUPI RAND SUPI-0 SUPI-1 data) (SN UE HN SN-0 name))
   (defstrand ServingNetwork 7 (SQN SQN) (SUPI SUPI) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 2 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN-0) (HN HN))
   (deflistener
     (cat
@@ -783,10 +831,10 @@
         RAND (hash (ltk UE HN) RAND)) RAND))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (precedes ((1 1) (3 1)) ((2 1) (0 2)) ((3 2) (2 0)))
+  (precedes ((1 2) (3 1)) ((2 1) (0 2)) ((3 2) (2 0)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
-  (operation encryption-test (displaced 4 1 HomeNetwork 2)
+  (operation encryption-test (displaced 4 1 HomeNetwork 3)
     (hash SQN-0 (hash (ltk UE HN) RAND)) (3 1))
   (traces
     ((recv (enc SUPI (pubk HN))) (send (enc SUPI (pubk HN) SN))
@@ -812,6 +860,10 @@
             (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND))
               SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI)))
     ((recv (enc SUPI-0 (pubk HN) SN-0))
+      (init
+        (cat
+          (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND))
+            SN-0 RAND (hash (ltk UE HN) RAND)) SUPI-0))
       (send
         (cat RAND
           (cat (hash SQN (hash (ltk UE HN) RAND))
@@ -844,7 +896,7 @@
     (SN UE HN SN-0 name))
   (defstrand ServingNetwork 7 (SQN SQN) (SUPI SUPI) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 2 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN-0) (HN HN))
   (deflistener
     (cat
@@ -853,7 +905,8 @@
   (defstrand UserEquip 3 (SQN SQN-0) (SUPI SUPI-1) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
   (deflistener (cat SQN-0 (hash (ltk UE HN) RAND)))
-  (precedes ((1 1) (4 0)) ((2 1) (0 2)) ((3 2) (2 0)) ((4 1) (3 1)))
+  (precedes ((1 1) (4 0)) ((1 2) (0 2)) ((2 1) (0 2)) ((3 2) (2 0))
+    ((4 1) (3 1)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
   (operation encryption-test
@@ -883,6 +936,10 @@
             (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND))
               SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI)))
     ((recv (enc SUPI-0 (pubk HN) SN-0))
+      (init
+        (cat
+          (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND))
+            SN-0 RAND (hash (ltk UE HN) RAND)) SUPI-0))
       (send
         (cat RAND
           (cat (hash SQN (hash (ltk UE HN) RAND))
@@ -909,7 +966,7 @@
       (send (cat SQN-0 (hash (ltk UE HN) RAND)))))
   (label 14)
   (parent 9)
-  (unrealized (3 1) (4 0))
+  (unrealized (2 0) (3 1) (4 0))
   (dead)
   (comment "empty cohort"))
 
@@ -919,12 +976,12 @@
     (SN SN) (HN HN))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 4 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 5 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (precedes ((1 2) (0 4)) ((2 1) (0 2)) ((2 1) (1 1)) ((2 3) (0 6)))
+  (precedes ((1 2) (0 4)) ((2 2) (0 2)) ((2 2) (1 1)) ((2 4) (0 6)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
-  (operation encryption-test (displaced 1 3 HomeNetwork 4)
+  (operation encryption-test (displaced 1 3 HomeNetwork 5)
     (hash
       (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
         (hash SQN (hash (ltk UE HN) RAND))) SN) (0 6))
@@ -959,6 +1016,10 @@
         (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
           RAND (hash (ltk UE HN) RAND))))
     ((recv (enc SUPI-1 (pubk HN) SN))
+      (init
+        (cat
+          (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
+            RAND (hash (ltk UE HN) RAND)) SUPI-1))
       (send
         (cat RAND
           (cat (hash SQN (hash (ltk UE HN) RAND))
@@ -976,14 +1037,14 @@
               SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI-1))))
   (label 15)
   (parent 11)
-  (unrealized (2 2))
+  (unrealized (2 3))
   (comment "3 in cohort - 3 not yet seen"))
 
 (defskeleton AKA5G
   (vars (SQN text) (SUPI RAND SUPI-0 SUPI-1 data) (UE HN SN name))
   (defstrand ServingNetwork 7 (SQN SQN) (SUPI SUPI) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 2 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
@@ -991,7 +1052,7 @@
     (cat
       (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
         (hash SQN (hash (ltk UE HN) RAND))) SN))
-  (precedes ((1 1) (0 2)) ((1 1) (2 1)) ((1 1) (3 0)) ((2 2) (0 4))
+  (precedes ((1 1) (3 0)) ((1 2) (0 2)) ((1 2) (2 1)) ((2 2) (0 4))
     ((3 1) (0 6)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
@@ -1027,6 +1088,10 @@
             (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND))
               SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI)))
     ((recv (enc SUPI-0 (pubk HN) SN))
+      (init
+        (cat
+          (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
+            RAND (hash (ltk UE HN) RAND)) SUPI-0))
       (send
         (cat RAND
           (cat (hash SQN (hash (ltk UE HN) RAND))
@@ -1064,12 +1129,12 @@
         RAND (hash (ltk UE HN) RAND)) RAND))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 4 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 5 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (precedes ((1 1) (0 2)) ((2 2) (1 0)) ((3 1) (2 1)) ((3 3) (0 6)))
+  (precedes ((1 1) (0 2)) ((2 2) (1 0)) ((3 2) (2 1)) ((3 4) (0 6)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
-  (operation encryption-test (displaced 1 4 HomeNetwork 4)
+  (operation encryption-test (displaced 1 4 HomeNetwork 5)
     (hash
       (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
         (hash SQN (hash (ltk UE HN) RAND))) SN) (0 6))
@@ -1112,6 +1177,10 @@
         (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
           RAND (hash (ltk UE HN) RAND))))
     ((recv (enc SUPI-1 (pubk HN) SN))
+      (init
+        (cat
+          (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
+            RAND (hash (ltk UE HN) RAND)) SUPI-1))
       (send
         (cat RAND
           (cat (hash SQN (hash (ltk UE HN) RAND))
@@ -1129,14 +1198,14 @@
               SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI-1))))
   (label 17)
   (parent 13)
-  (unrealized (3 2))
+  (unrealized (3 3))
   (comment "3 in cohort - 3 not yet seen"))
 
 (defskeleton AKA5G
   (vars (SQN text) (SUPI RAND SUPI-0 SUPI-1 data) (SN UE HN SN-0 name))
   (defstrand ServingNetwork 7 (SQN SQN) (SUPI SUPI) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 2 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN-0) (HN HN))
   (deflistener
     (cat
@@ -1148,7 +1217,7 @@
     (cat
       (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
         (hash SQN (hash (ltk UE HN) RAND))) SN))
-  (precedes ((1 1) (3 1)) ((1 1) (4 0)) ((2 1) (0 2)) ((3 2) (2 0))
+  (precedes ((1 1) (4 0)) ((1 2) (3 1)) ((2 1) (0 2)) ((3 2) (2 0))
     ((4 1) (0 6)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
@@ -1184,6 +1253,10 @@
             (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND))
               SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI)))
     ((recv (enc SUPI-0 (pubk HN) SN-0))
+      (init
+        (cat
+          (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND))
+            SN-0 RAND (hash (ltk UE HN) RAND)) SUPI-0))
       (send
         (cat RAND
           (cat (hash SQN (hash (ltk UE HN) RAND))
@@ -1225,15 +1298,15 @@
     (SN SN) (HN HN))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 4 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 5 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (precedes ((1 2) (0 4)) ((1 2) (2 2)) ((2 1) (0 2)) ((2 1) (1 1))
-    ((2 3) (0 6)))
+  (precedes ((1 2) (0 4)) ((1 2) (2 3)) ((2 2) (0 2)) ((2 2) (1 1))
+    ((2 4) (0 6)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
   (operation encryption-test (displaced 3 1 UserEquip 3)
     (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND
-      (hash (ltk UE HN) RAND)) (2 2))
+      (hash (ltk UE HN) RAND)) (2 3))
   (traces
     ((recv (enc SUPI (pubk HN))) (send (enc SUPI (pubk HN) SN))
       (recv
@@ -1265,6 +1338,10 @@
         (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
           RAND (hash (ltk UE HN) RAND))))
     ((recv (enc SUPI-1 (pubk HN) SN))
+      (init
+        (cat
+          (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
+            RAND (hash (ltk UE HN) RAND)) SUPI-1))
       (send
         (cat RAND
           (cat (hash SQN (hash (ltk UE HN) RAND))
@@ -1295,17 +1372,17 @@
     (SN SN) (HN HN))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 4 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 5 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
   (defstrand UserEquip 3 (SQN SQN-0) (SUPI SUPI-2) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (precedes ((1 2) (0 4)) ((2 1) (0 2)) ((2 1) (1 1)) ((2 1) (3 1))
-    ((2 3) (0 6)) ((3 2) (2 2)))
+  (precedes ((1 2) (0 4)) ((2 1) (3 1)) ((2 2) (0 2)) ((2 2) (1 1))
+    ((2 4) (0 6)) ((3 2) (2 3)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
   (operation encryption-test (added-strand UserEquip 3)
     (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND
-      (hash (ltk UE HN) RAND)) (2 2))
+      (hash (ltk UE HN) RAND)) (2 3))
   (traces
     ((recv (enc SUPI (pubk HN))) (send (enc SUPI (pubk HN) SN))
       (recv
@@ -1337,6 +1414,10 @@
         (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
           RAND (hash (ltk UE HN) RAND))))
     ((recv (enc SUPI-1 (pubk HN) SN))
+      (init
+        (cat
+          (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
+            RAND (hash (ltk UE HN) RAND)) SUPI-1))
       (send
         (cat RAND
           (cat (hash SQN (hash (ltk UE HN) RAND))
@@ -1370,13 +1451,13 @@
     (SN SN) (HN HN))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 4 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 5 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
   (deflistener
     (cat (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND
       (hash (ltk UE HN) RAND)))
-  (precedes ((1 2) (0 4)) ((2 1) (0 2)) ((2 1) (1 1)) ((2 1) (3 0))
-    ((2 3) (0 6)) ((3 1) (2 2)))
+  (precedes ((1 2) (0 4)) ((2 1) (3 0)) ((2 2) (0 2)) ((2 2) (1 1))
+    ((2 4) (0 6)) ((3 1) (2 3)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
   (operation encryption-test
@@ -1384,7 +1465,7 @@
       (cat (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND
         (hash (ltk UE HN) RAND)))
     (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND
-      (hash (ltk UE HN) RAND)) (2 2))
+      (hash (ltk UE HN) RAND)) (2 3))
   (traces
     ((recv (enc SUPI (pubk HN))) (send (enc SUPI (pubk HN) SN))
       (recv
@@ -1416,6 +1497,10 @@
         (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
           RAND (hash (ltk UE HN) RAND))))
     ((recv (enc SUPI-1 (pubk HN) SN))
+      (init
+        (cat
+          (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
+            RAND (hash (ltk UE HN) RAND)) SUPI-1))
       (send
         (cat RAND
           (cat (hash SQN (hash (ltk UE HN) RAND))
@@ -1447,7 +1532,7 @@
   (vars (SQN text) (SUPI RAND SUPI-0 SUPI-1 data) (UE HN SN name))
   (defstrand ServingNetwork 7 (SQN SQN) (SUPI SUPI) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 2 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
@@ -1458,7 +1543,7 @@
   (deflistener
     (cat (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
       (hash SQN (hash (ltk UE HN) RAND))))
-  (precedes ((1 1) (0 2)) ((1 1) (2 1)) ((1 1) (4 0)) ((2 2) (0 4))
+  (precedes ((1 1) (4 0)) ((1 2) (0 2)) ((1 2) (2 1)) ((2 2) (0 4))
     ((3 1) (0 6)) ((4 1) (3 0)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
@@ -1492,6 +1577,10 @@
             (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND))
               SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI)))
     ((recv (enc SUPI-0 (pubk HN) SN))
+      (init
+        (cat
+          (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
+            RAND (hash (ltk UE HN) RAND)) SUPI-0))
       (send
         (cat RAND
           (cat (hash SQN (hash (ltk UE HN) RAND))
@@ -1536,15 +1625,15 @@
         RAND (hash (ltk UE HN) RAND)) RAND))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 4 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 5 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (precedes ((1 1) (0 2)) ((2 2) (1 0)) ((2 2) (3 2)) ((3 1) (2 1))
-    ((3 3) (0 6)))
+  (precedes ((1 1) (0 2)) ((2 2) (1 0)) ((2 2) (3 3)) ((3 2) (2 1))
+    ((3 4) (0 6)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
   (operation encryption-test (displaced 4 2 UserEquip 3)
     (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND
-      (hash (ltk UE HN) RAND)) (3 2))
+      (hash (ltk UE HN) RAND)) (3 3))
   (traces
     ((recv (enc SUPI (pubk HN))) (send (enc SUPI (pubk HN) SN))
       (recv
@@ -1584,6 +1673,10 @@
         (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
           RAND (hash (ltk UE HN) RAND))))
     ((recv (enc SUPI-1 (pubk HN) SN))
+      (init
+        (cat
+          (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
+            RAND (hash (ltk UE HN) RAND)) SUPI-1))
       (send
         (cat RAND
           (cat (hash SQN (hash (ltk UE HN) RAND))
@@ -1615,17 +1708,17 @@
         RAND (hash (ltk UE HN) RAND)) RAND))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 4 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 5 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
   (defstrand UserEquip 3 (SQN SQN-0) (SUPI SUPI-2) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (precedes ((1 1) (0 2)) ((2 2) (1 0)) ((3 1) (2 1)) ((3 1) (4 1))
-    ((3 3) (0 6)) ((4 2) (3 2)))
+  (precedes ((1 1) (0 2)) ((2 2) (1 0)) ((3 1) (4 1)) ((3 2) (2 1))
+    ((3 4) (0 6)) ((4 2) (3 3)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
   (operation encryption-test (added-strand UserEquip 3)
     (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND
-      (hash (ltk UE HN) RAND)) (3 2))
+      (hash (ltk UE HN) RAND)) (3 3))
   (traces
     ((recv (enc SUPI (pubk HN))) (send (enc SUPI (pubk HN) SN))
       (recv
@@ -1665,6 +1758,10 @@
         (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
           RAND (hash (ltk UE HN) RAND))))
     ((recv (enc SUPI-1 (pubk HN) SN))
+      (init
+        (cat
+          (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
+            RAND (hash (ltk UE HN) RAND)) SUPI-1))
       (send
         (cat RAND
           (cat (hash SQN (hash (ltk UE HN) RAND))
@@ -1702,13 +1799,13 @@
         RAND (hash (ltk UE HN) RAND)) RAND))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 4 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 5 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
   (deflistener
     (cat (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND
       (hash (ltk UE HN) RAND)))
-  (precedes ((1 1) (0 2)) ((2 2) (1 0)) ((3 1) (2 1)) ((3 1) (4 0))
-    ((3 3) (0 6)) ((4 1) (3 2)))
+  (precedes ((1 1) (0 2)) ((2 2) (1 0)) ((3 1) (4 0)) ((3 2) (2 1))
+    ((3 4) (0 6)) ((4 1) (3 3)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
   (operation encryption-test
@@ -1716,7 +1813,7 @@
       (cat (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND
         (hash (ltk UE HN) RAND)))
     (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND
-      (hash (ltk UE HN) RAND)) (3 2))
+      (hash (ltk UE HN) RAND)) (3 3))
   (traces
     ((recv (enc SUPI (pubk HN))) (send (enc SUPI (pubk HN) SN))
       (recv
@@ -1756,6 +1853,10 @@
         (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
           RAND (hash (ltk UE HN) RAND))))
     ((recv (enc SUPI-1 (pubk HN) SN))
+      (init
+        (cat
+          (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
+            RAND (hash (ltk UE HN) RAND)) SUPI-1))
       (send
         (cat RAND
           (cat (hash SQN (hash (ltk UE HN) RAND))
@@ -1787,7 +1888,7 @@
   (vars (SQN text) (SUPI RAND SUPI-0 SUPI-1 data) (SN UE HN SN-0 name))
   (defstrand ServingNetwork 7 (SQN SQN) (SUPI SUPI) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 2 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN-0) (HN HN))
   (deflistener
     (cat
@@ -1802,7 +1903,7 @@
   (deflistener
     (cat (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
       (hash SQN (hash (ltk UE HN) RAND))))
-  (precedes ((1 1) (3 1)) ((1 1) (5 0)) ((2 1) (0 2)) ((3 2) (2 0))
+  (precedes ((1 1) (5 0)) ((1 2) (3 1)) ((2 1) (0 2)) ((3 2) (2 0))
     ((4 1) (0 6)) ((5 1) (4 0)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
@@ -1836,6 +1937,10 @@
             (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND))
               SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI)))
     ((recv (enc SUPI-0 (pubk HN) SN-0))
+      (init
+        (cat
+          (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND))
+            SN-0 RAND (hash (ltk UE HN) RAND)) SUPI-0))
       (send
         (cat RAND
           (cat (hash SQN (hash (ltk UE HN) RAND))
@@ -1885,15 +1990,15 @@
     (SN SN) (HN HN))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 4 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 5 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI-2) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (precedes ((1 2) (0 4)) ((2 1) (0 2)) ((2 1) (1 1)) ((2 1) (3 1))
-    ((2 3) (0 6)) ((3 2) (2 2)))
+  (precedes ((1 2) (0 4)) ((2 2) (0 2)) ((2 2) (1 1)) ((2 2) (3 1))
+    ((2 4) (0 6)) ((3 2) (2 3)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
-  (operation encryption-test (displaced 4 2 HomeNetwork 2)
+  (operation encryption-test (displaced 4 2 HomeNetwork 3)
     (hash SQN-0 (hash (ltk UE HN) RAND)) (3 1))
   (traces
     ((recv (enc SUPI (pubk HN))) (send (enc SUPI (pubk HN) SN))
@@ -1926,6 +2031,10 @@
         (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
           RAND (hash (ltk UE HN) RAND))))
     ((recv (enc SUPI-1 (pubk HN) SN))
+      (init
+        (cat
+          (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
+            RAND (hash (ltk UE HN) RAND)) SUPI-1))
       (send
         (cat RAND
           (cat (hash SQN (hash (ltk UE HN) RAND))
@@ -1963,13 +2072,13 @@
     (SN SN) (HN HN))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 4 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 5 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
   (defstrand UserEquip 3 (SQN SQN-0) (SUPI SUPI-2) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
   (deflistener (cat SQN-0 (hash (ltk UE HN) RAND)))
-  (precedes ((1 2) (0 4)) ((2 1) (0 2)) ((2 1) (1 1)) ((2 1) (4 0))
-    ((2 3) (0 6)) ((3 2) (2 2)) ((4 1) (3 1)))
+  (precedes ((1 2) (0 4)) ((2 1) (4 0)) ((2 2) (0 2)) ((2 2) (1 1))
+    ((2 4) (0 6)) ((3 2) (2 3)) ((4 1) (3 1)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
   (operation encryption-test
@@ -2006,6 +2115,10 @@
         (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
           RAND (hash (ltk UE HN) RAND))))
     ((recv (enc SUPI-1 (pubk HN) SN))
+      (init
+        (cat
+          (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
+            RAND (hash (ltk UE HN) RAND)) SUPI-1))
       (send
         (cat RAND
           (cat (hash SQN (hash (ltk UE HN) RAND))
@@ -2042,9 +2155,9 @@
     (SN SN) (HN HN))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 4 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 5 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (precedes ((1 2) (0 2)) ((1 2) (2 2)) ((2 1) (1 1)) ((2 3) (0 6)))
+  (precedes ((1 2) (0 2)) ((1 2) (2 3)) ((2 2) (1 1)) ((2 4) (0 6)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
   (operation generalization deleted (1 0))
@@ -2079,6 +2192,10 @@
         (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
           RAND (hash (ltk UE HN) RAND))))
     ((recv (enc SUPI-1 (pubk HN) SN))
+      (init
+        (cat
+          (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
+            RAND (hash (ltk UE HN) RAND)) SUPI-1))
       (send
         (cat RAND
           (cat (hash SQN (hash (ltk UE HN) RAND))
@@ -2110,15 +2227,15 @@
         RAND (hash (ltk UE HN) RAND)) RAND))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 4 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 5 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI-2) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (precedes ((1 1) (0 2)) ((2 2) (1 0)) ((3 1) (2 1)) ((3 1) (4 1))
-    ((3 3) (0 6)) ((4 2) (3 2)))
+  (precedes ((1 1) (0 2)) ((2 2) (1 0)) ((3 2) (2 1)) ((3 2) (4 1))
+    ((3 4) (0 6)) ((4 2) (3 3)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
-  (operation encryption-test (displaced 5 3 HomeNetwork 2)
+  (operation encryption-test (displaced 5 3 HomeNetwork 3)
     (hash SQN-0 (hash (ltk UE HN) RAND)) (4 1))
   (traces
     ((recv (enc SUPI (pubk HN))) (send (enc SUPI (pubk HN) SN))
@@ -2159,6 +2276,10 @@
         (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
           RAND (hash (ltk UE HN) RAND))))
     ((recv (enc SUPI-1 (pubk HN) SN))
+      (init
+        (cat
+          (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
+            RAND (hash (ltk UE HN) RAND)) SUPI-1))
       (send
         (cat RAND
           (cat (hash SQN (hash (ltk UE HN) RAND))
@@ -2197,13 +2318,13 @@
         RAND (hash (ltk UE HN) RAND)) RAND))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 4 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 5 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
   (defstrand UserEquip 3 (SQN SQN-0) (SUPI SUPI-2) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
   (deflistener (cat SQN-0 (hash (ltk UE HN) RAND)))
-  (precedes ((1 1) (0 2)) ((2 2) (1 0)) ((3 1) (2 1)) ((3 1) (5 0))
-    ((3 3) (0 6)) ((4 2) (3 2)) ((5 1) (4 1)))
+  (precedes ((1 1) (0 2)) ((2 2) (1 0)) ((3 1) (5 0)) ((3 2) (2 1))
+    ((3 4) (0 6)) ((4 2) (3 3)) ((5 1) (4 1)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
   (operation encryption-test
@@ -2248,6 +2369,10 @@
         (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
           RAND (hash (ltk UE HN) RAND))))
     ((recv (enc SUPI-1 (pubk HN) SN))
+      (init
+        (cat
+          (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
+            RAND (hash (ltk UE HN) RAND)) SUPI-1))
       (send
         (cat RAND
           (cat (hash SQN (hash (ltk UE HN) RAND))
@@ -2284,10 +2409,10 @@
     (SN SN) (HN HN))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 4 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 5 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (precedes ((1 0) (0 2)) ((1 2) (0 4)) ((1 2) (2 2)) ((2 1) (0 2))
-    ((2 1) (1 1)) ((2 3) (0 6)))
+  (precedes ((1 0) (0 2)) ((1 2) (0 4)) ((1 2) (2 3)) ((2 2) (0 2))
+    ((2 2) (1 1)) ((2 4) (0 6)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
   (operation generalization weakened ((1 2) (0 2)))
@@ -2322,6 +2447,10 @@
         (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
           RAND (hash (ltk UE HN) RAND))))
     ((recv (enc SUPI-1 (pubk HN) SN))
+      (init
+        (cat
+          (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
+            RAND (hash (ltk UE HN) RAND)) SUPI-1))
       (send
         (cat RAND
           (cat (hash SQN (hash (ltk UE HN) RAND))
@@ -2350,12 +2479,12 @@
     (SN SN) (HN HN))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 4 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 5 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI-2) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (precedes ((1 2) (0 2)) ((2 1) (1 1)) ((2 1) (3 1)) ((2 3) (0 6))
-    ((3 2) (2 2)))
+  (precedes ((1 2) (0 2)) ((2 2) (1 1)) ((2 2) (3 1)) ((2 4) (0 6))
+    ((3 2) (2 3)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
   (operation generalization deleted (1 0))
@@ -2390,6 +2519,10 @@
         (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
           RAND (hash (ltk UE HN) RAND))))
     ((recv (enc SUPI-1 (pubk HN) SN))
+      (init
+        (cat
+          (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
+            RAND (hash (ltk UE HN) RAND)) SUPI-1))
       (send
         (cat RAND
           (cat (hash SQN (hash (ltk UE HN) RAND))
@@ -2424,12 +2557,12 @@
     (SN SN) (HN HN))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 4 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 5 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI-2) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (precedes ((1 0) (0 2)) ((1 2) (0 4)) ((2 1) (0 2)) ((2 1) (1 1))
-    ((2 1) (3 1)) ((2 3) (0 6)) ((3 2) (2 2)))
+  (precedes ((1 0) (0 2)) ((1 2) (0 4)) ((2 2) (0 2)) ((2 2) (1 1))
+    ((2 2) (3 1)) ((2 4) (0 6)) ((3 2) (2 3)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
   (operation generalization weakened ((1 2) (0 2)))
@@ -2464,6 +2597,10 @@
         (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
           RAND (hash (ltk UE HN) RAND))))
     ((recv (enc SUPI-1 (pubk HN) SN))
+      (init
+        (cat
+          (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
+            RAND (hash (ltk UE HN) RAND)) SUPI-1))
       (send
         (cat RAND
           (cat (hash SQN (hash (ltk UE HN) RAND))
@@ -2533,6 +2670,10 @@
   (defrole HomeNetwork
     (vars (SUPI RAND data) (UE SN HN name) (SQN text))
     (trace (recv (enc SUPI (pubk HN) SN))
+      (init
+        (cat
+          (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
+            RAND (hash (ltk UE HN) RAND)) SUPI))
       (send
         (cat RAND
           (cat (hash SQN (hash (ltk UE HN) RAND))
@@ -2559,6 +2700,10 @@
   (uniq-gen RAND)
   (traces
     ((recv (enc SUPI (pubk HN) SN))
+      (init
+        (cat
+          (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
+            RAND (hash (ltk UE HN) RAND)) SUPI))
       (send
         (cat RAND
           (cat (hash SQN (hash (ltk UE HN) RAND))
@@ -2568,14 +2713,9 @@
               SN RAND (hash (ltk UE HN) RAND)) RAND)))
       (recv
         (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
-          RAND (hash (ltk UE HN) RAND)))
-      (send
-        (cat "Success"
-          (hash
-            (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND))
-              SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI))))
+          RAND (hash (ltk UE HN) RAND)))))
   (label 35)
-  (unrealized (0 2))
+  (unrealized (0 3))
   (origs)
   (comment "2 in cohort - 2 not yet seen"))
 
@@ -2585,14 +2725,18 @@
     (SN SN) (HN HN))
   (defstrand UserEquip 3 (SQN SQN-0) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (precedes ((0 1) (1 1)) ((1 2) (0 2)))
+  (precedes ((0 1) (1 1)) ((1 2) (0 3)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
   (operation encryption-test (added-strand UserEquip 3)
     (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND
-      (hash (ltk UE HN) RAND)) (0 2))
+      (hash (ltk UE HN) RAND)) (0 3))
   (traces
     ((recv (enc SUPI (pubk HN) SN))
+      (init
+        (cat
+          (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
+            RAND (hash (ltk UE HN) RAND)) SUPI))
       (send
         (cat RAND
           (cat (hash SQN (hash (ltk UE HN) RAND))
@@ -2602,12 +2746,7 @@
               SN RAND (hash (ltk UE HN) RAND)) RAND)))
       (recv
         (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
-          RAND (hash (ltk UE HN) RAND)))
-      (send
-        (cat "Success"
-          (hash
-            (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND))
-              SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI)))
+          RAND (hash (ltk UE HN) RAND))))
     ((send (enc SUPI-0 (pubk HN)))
       (recv
         (cat RAND (hash SQN-0 (hash (ltk UE HN) RAND))
@@ -2627,7 +2766,7 @@
   (deflistener
     (cat (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND
       (hash (ltk UE HN) RAND)))
-  (precedes ((0 1) (1 0)) ((1 1) (0 2)))
+  (precedes ((0 1) (1 0)) ((1 1) (0 3)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
   (operation encryption-test
@@ -2635,9 +2774,13 @@
       (cat (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND
         (hash (ltk UE HN) RAND)))
     (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND
-      (hash (ltk UE HN) RAND)) (0 2))
+      (hash (ltk UE HN) RAND)) (0 3))
   (traces
     ((recv (enc SUPI (pubk HN) SN))
+      (init
+        (cat
+          (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
+            RAND (hash (ltk UE HN) RAND)) SUPI))
       (send
         (cat RAND
           (cat (hash SQN (hash (ltk UE HN) RAND))
@@ -2647,12 +2790,7 @@
               SN RAND (hash (ltk UE HN) RAND)) RAND)))
       (recv
         (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
-          RAND (hash (ltk UE HN) RAND)))
-      (send
-        (cat "Success"
-          (hash
-            (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND))
-              SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI)))
+          RAND (hash (ltk UE HN) RAND))))
     ((recv
        (cat (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
          RAND (hash (ltk UE HN) RAND)))
@@ -2671,13 +2809,17 @@
     (SN SN) (HN HN))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (precedes ((0 1) (1 1)) ((1 2) (0 2)))
+  (precedes ((0 2) (1 1)) ((1 2) (0 3)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
-  (operation encryption-test (displaced 2 0 HomeNetwork 2)
+  (operation encryption-test (displaced 2 0 HomeNetwork 3)
     (hash SQN-0 (hash (ltk UE HN) RAND)) (1 1))
   (traces
     ((recv (enc SUPI (pubk HN) SN))
+      (init
+        (cat
+          (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
+            RAND (hash (ltk UE HN) RAND)) SUPI))
       (send
         (cat RAND
           (cat (hash SQN (hash (ltk UE HN) RAND))
@@ -2687,12 +2829,7 @@
               SN RAND (hash (ltk UE HN) RAND)) RAND)))
       (recv
         (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
-          RAND (hash (ltk UE HN) RAND)))
-      (send
-        (cat "Success"
-          (hash
-            (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND))
-              SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI)))
+          RAND (hash (ltk UE HN) RAND))))
     ((send (enc SUPI-0 (pubk HN)))
       (recv
         (cat RAND (hash SQN (hash (ltk UE HN) RAND))
@@ -2715,7 +2852,7 @@
   (defstrand UserEquip 3 (SQN SQN-0) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
   (deflistener (cat SQN-0 (hash (ltk UE HN) RAND)))
-  (precedes ((0 1) (2 0)) ((1 2) (0 2)) ((2 1) (1 1)))
+  (precedes ((0 1) (2 0)) ((1 2) (0 3)) ((2 1) (1 1)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
   (operation encryption-test
@@ -2723,6 +2860,10 @@
     (hash SQN-0 (hash (ltk UE HN) RAND)) (1 1))
   (traces
     ((recv (enc SUPI (pubk HN) SN))
+      (init
+        (cat
+          (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
+            RAND (hash (ltk UE HN) RAND)) SUPI))
       (send
         (cat RAND
           (cat (hash SQN (hash (ltk UE HN) RAND))
@@ -2732,12 +2873,7 @@
               SN RAND (hash (ltk UE HN) RAND)) RAND)))
       (recv
         (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
-          RAND (hash (ltk UE HN) RAND)))
-      (send
-        (cat "Success"
-          (hash
-            (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND))
-              SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI)))
+          RAND (hash (ltk UE HN) RAND))))
     ((send (enc SUPI-0 (pubk HN)))
       (recv
         (cat RAND (hash SQN-0 (hash (ltk UE HN) RAND))

@@ -81,6 +81,10 @@
   (defrole HomeNetwork
     (vars (SUPI RAND data) (UE SN HN name) (SQN text))
     (trace (recv (enc SUPI (pubk HN) SN))
+      (init
+        (cat
+          (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
+            RAND (hash (ltk UE HN) RAND)) SUPI))
       (send
         (cat RAND
           (cat (hash SQN (hash (ltk UE HN) RAND))
@@ -148,9 +152,9 @@
 
 <div>
  <svg
-  class='diagram' width='179.880pt' height='304.920pt'
+  class='diagram' width='179.880pt' height='379.920pt'
   xmlns='http://www.w3.org/2000/svg' version='1.1'
-  viewBox='0 0 179.880 304.920' font-size='12.000'>
+  viewBox='0 0 179.880 379.920' font-size='12.000'>
   <defs>
    <marker
     id='arrow' orient='auto' markerWidth='5' markerHeight='10' refX='5'
@@ -160,27 +164,30 @@
      style='stroke-width: 2; fill: none; stroke: black;'/></marker>
    </defs>
   <line
-   x1='139.920' y1='114.960' x2='139.920' y2='189.960'
+   x1='139.920' y1='114.960' x2='139.920' y2='264.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='39.960' y1='114.960' x2='39.960' y2='264.960'
+   x1='39.960' y1='189.960' x2='39.960' y2='339.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <path
-   d='M 139.920 189.960 Q 92.940 189.960 45.960 189.960'
+   d='M 139.920 264.960 Q 92.940 264.960 45.960 264.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN-0 RAND (hash (ltk UE HN) RAND)) RAND))</title>
-   <circle cx='139.920' cy='189.960' r='6.000'/></g>
+   <circle cx='139.920' cy='264.960' r='6.000'/></g>
+  <g>
+   <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN-0 RAND (hash (ltk UE HN) RAND)) SUPI-0)</title>
+   <circle style='fill: gray;' cx='139.920' cy='189.960' r='6.000'/></g>
   <g><title>(enc SUPI-0 (pubk HN) SN-0)</title>
    <circle style='fill: blue;' cx='139.920' cy='114.960' r='6.000'/></g>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle cx='39.960' cy='264.960' r='6.000'/></g>
+   <circle cx='39.960' cy='339.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN)))</title>
-   <circle style='fill: blue;' cx='39.960' cy='189.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='39.960' cy='264.960' r='6.000'/></g>
   <g><title>(enc SUPI (pubk HN))</title>
-   <circle cx='39.960' cy='114.960' r='6.000'/></g>
+   <circle cx='39.960' cy='189.960' r='6.000'/></g>
   <g>
    <title>((SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE) (SN SN-0) (HN HN))</title>
    <text
@@ -199,12 +206,12 @@
   (vars (SQN text) (SUPI RAND SUPI-0 data) (UE HN SN SN-0 name))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 2 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN-0) (HN HN))
-  (precedes ((1 1) (0 1)))
+  (precedes ((1 2) (0 1)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
-  (operation encryption-test (added-strand HomeNetwork 2)
+  (operation encryption-test (added-strand HomeNetwork 3)
     (hash SQN (hash (ltk UE HN) RAND)) (0 1))
   (label 1)
   (parent 0)
@@ -528,6 +535,10 @@
   (defrole HomeNetwork
     (vars (SUPI RAND data) (UE SN HN name) (SQN text))
     (trace (recv (enc SUPI (pubk HN) SN))
+      (init
+        (cat
+          (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
+            RAND (hash (ltk UE HN) RAND)) SUPI))
       (send
         (cat RAND
           (cat (hash SQN (hash (ltk UE HN) RAND))
@@ -618,17 +629,20 @@
      style='stroke-width: 2; fill: none; stroke: black;'/></marker>
    </defs>
   <line
-   x1='139.920' y1='114.960' x2='139.920' y2='189.960'
+   x1='139.920' y1='114.960' x2='139.920' y2='264.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
    x1='39.960' y1='114.960' x2='39.960' y2='564.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <path
-   d='M 139.920 189.960 Q 92.340 225.660 44.759 261.359'
+   d='M 139.920 264.960 Q 92.940 264.960 45.960 264.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN-0 RAND (hash (ltk UE HN) RAND)) RAND))</title>
-   <circle cx='139.920' cy='189.960' r='6.000'/></g>
+   <circle cx='139.920' cy='264.960' r='6.000'/></g>
+  <g>
+   <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN-0 RAND (hash (ltk UE HN) RAND)) SUPI-0)</title>
+   <circle style='fill: gray;' cx='139.920' cy='189.960' r='6.000'/></g>
   <g><title>(enc SUPI-0 (pubk HN) SN-0)</title>
    <circle style='fill: blue;' cx='139.920' cy='114.960' r='6.000'/></g>
   <g>
@@ -668,12 +682,12 @@
   (vars (SQN text) (SUPI RAND SUPI-0 data) (SN UE HN SN-0 name))
   (defstrand ServingNetwork 7 (SQN SQN) (SUPI SUPI) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 2 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN-0) (HN HN))
-  (precedes ((1 1) (0 2)))
+  (precedes ((1 2) (0 2)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
-  (operation encryption-test (added-strand HomeNetwork 2)
+  (operation encryption-test (added-strand HomeNetwork 3)
     (hash SQN (hash (ltk UE HN) RAND)) (0 2))
   (label 4)
   (parent 3)
@@ -696,17 +710,20 @@
      style='stroke-width: 2; fill: none; stroke: black;'/></marker>
    </defs>
   <line
-   x1='139.920' y1='114.960' x2='139.920' y2='189.960'
+   x1='139.920' y1='114.960' x2='139.920' y2='264.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
    x1='39.960' y1='114.960' x2='39.960' y2='564.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <path
-   d='M 139.920 189.960 Q 92.340 225.660 44.759 261.359'
+   d='M 139.920 264.960 Q 92.940 264.960 45.960 264.960'
    style='stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
-   <circle cx='139.920' cy='189.960' r='6.000'/></g>
+   <circle cx='139.920' cy='264.960' r='6.000'/></g>
+  <g>
+   <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) SUPI-0)</title>
+   <circle style='fill: gray;' cx='139.920' cy='189.960' r='6.000'/></g>
   <g><title>(enc SUPI-0 (pubk HN) SN)</title>
    <circle style='fill: blue;' cx='139.920' cy='114.960' r='6.000'/></g>
   <g>
@@ -746,12 +763,12 @@
   (vars (SQN text) (SUPI RAND SUPI-0 data) (UE HN SN name))
   (defstrand ServingNetwork 7 (SQN SQN) (SUPI SUPI) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 2 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (precedes ((1 1) (0 2)))
+  (precedes ((1 2) (0 2)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
-  (operation encryption-test (displaced 2 1 HomeNetwork 2)
+  (operation encryption-test (displaced 2 1 HomeNetwork 3)
     (hash
       (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN-0
         RAND (hash (ltk UE HN) RAND)) RAND) (0 2))
@@ -779,7 +796,7 @@
    x1='239.880' y1='189.960' x2='239.880' y2='264.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='139.920' y1='114.960' x2='139.920' y2='189.960'
+   x1='139.920' y1='114.960' x2='139.920' y2='264.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
    x1='39.960' y1='114.960' x2='39.960' y2='564.960'
@@ -794,11 +811,17 @@
    <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND)</title>
    <circle style='fill: red;' cx='239.880' cy='189.960' r='6.000'/></g>
   <path
-   d='M 139.920 189.960 Q 186.900 189.960 233.880 189.960'
+   d='M 139.920 264.960 Q 92.940 264.960 45.960 264.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN-0 RAND (hash (ltk UE HN) RAND)) RAND))</title>
-   <circle cx='139.920' cy='189.960' r='6.000'/></g>
+   <circle cx='139.920' cy='264.960' r='6.000'/></g>
+  <path
+   d='M 139.920 189.960 Q 186.900 189.960 233.880 189.960'
+   style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
+  <g>
+   <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN-0 RAND (hash (ltk UE HN) RAND)) SUPI-0)</title>
+   <circle style='fill: gray;' cx='139.920' cy='189.960' r='6.000'/></g>
   <g><title>(enc SUPI-0 (pubk HN) SN-0)</title>
    <circle style='fill: blue;' cx='139.920' cy='114.960' r='6.000'/></g>
   <g>
@@ -838,13 +861,13 @@
   (vars (SQN text) (SUPI RAND SUPI-0 data) (SN UE HN SN-0 name))
   (defstrand ServingNetwork 7 (SQN SQN) (SUPI SUPI) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 2 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN-0) (HN HN))
   (deflistener
     (cat
       (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
         RAND (hash (ltk UE HN) RAND)) RAND))
-  (precedes ((1 1) (2 0)) ((2 1) (0 2)))
+  (precedes ((1 1) (2 0)) ((1 2) (0 2)) ((2 1) (0 2)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
   (operation encryption-test
@@ -879,7 +902,7 @@
    x1='239.880' y1='114.960' x2='239.880' y2='264.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='139.920' y1='114.960' x2='139.920' y2='189.960'
+   x1='139.920' y1='114.960' x2='139.920' y2='264.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
    x1='39.960' y1='114.960' x2='39.960' y2='564.960'
@@ -896,14 +919,17 @@
   <g><title>(enc SUPI-1 (pubk HN))</title>
    <circle cx='239.880' cy='114.960' r='6.000'/></g>
   <path
-   d='M 139.920 189.960 Q 92.340 225.660 44.759 261.359'
+   d='M 139.920 264.960 Q 92.940 264.960 45.960 264.960'
    style='stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
+  <g>
+   <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
+   <circle cx='139.920' cy='264.960' r='6.000'/></g>
   <path
    d='M 139.920 189.960 Q 186.900 189.960 233.880 189.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
-   <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
-   <circle cx='139.920' cy='189.960' r='6.000'/></g>
+   <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) SUPI-0)</title>
+   <circle style='fill: gray;' cx='139.920' cy='189.960' r='6.000'/></g>
   <g><title>(enc SUPI-0 (pubk HN) SN)</title>
    <circle style='fill: blue;' cx='139.920' cy='114.960' r='6.000'/></g>
   <g>
@@ -948,11 +974,11 @@
   (vars (SQN SQN-0 text) (SUPI RAND SUPI-0 SUPI-1 data) (UE HN SN name))
   (defstrand ServingNetwork 7 (SQN SQN) (SUPI SUPI) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 2 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
   (defstrand UserEquip 3 (SQN SQN-0) (SUPI SUPI-1) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (precedes ((1 1) (0 2)) ((1 1) (2 1)) ((2 2) (0 4)))
+  (precedes ((1 1) (2 1)) ((1 2) (0 2)) ((2 2) (0 4)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
   (operation encryption-test (added-strand UserEquip 3)
@@ -982,7 +1008,7 @@
    x1='239.880' y1='189.960' x2='239.880' y2='264.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='139.920' y1='114.960' x2='139.920' y2='189.960'
+   x1='139.920' y1='114.960' x2='139.920' y2='264.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
    x1='39.960' y1='114.960' x2='39.960' y2='564.960'
@@ -997,14 +1023,17 @@
    <title>(cat (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
    <circle style='fill: red;' cx='239.880' cy='189.960' r='6.000'/></g>
   <path
-   d='M 139.920 189.960 Q 92.340 225.660 44.759 261.359'
+   d='M 139.920 264.960 Q 92.940 264.960 45.960 264.960'
    style='stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
+  <g>
+   <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
+   <circle cx='139.920' cy='264.960' r='6.000'/></g>
   <path
    d='M 139.920 189.960 Q 186.900 189.960 233.880 189.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
-   <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
-   <circle cx='139.920' cy='189.960' r='6.000'/></g>
+   <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) SUPI-0)</title>
+   <circle style='fill: gray;' cx='139.920' cy='189.960' r='6.000'/></g>
   <g><title>(enc SUPI-0 (pubk HN) SN)</title>
    <circle style='fill: blue;' cx='139.920' cy='114.960' r='6.000'/></g>
   <g>
@@ -1044,12 +1073,12 @@
   (vars (SQN text) (SUPI RAND SUPI-0 data) (UE HN SN name))
   (defstrand ServingNetwork 7 (SQN SQN) (SUPI SUPI) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 2 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
   (deflistener
     (cat (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND
       (hash (ltk UE HN) RAND)))
-  (precedes ((1 1) (0 2)) ((1 1) (2 0)) ((2 1) (0 4)))
+  (precedes ((1 1) (2 0)) ((1 2) (0 2)) ((2 1) (0 4)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
   (operation encryption-test
@@ -1086,7 +1115,7 @@
    x1='239.880' y1='264.960' x2='239.880' y2='339.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='139.920' y1='114.960' x2='139.920' y2='189.960'
+   x1='139.920' y1='114.960' x2='139.920' y2='264.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
    x1='39.960' y1='189.960' x2='39.960' y2='639.960'
@@ -1110,13 +1139,19 @@
    <circle cx='239.880' cy='339.960' r='6.000'/></g>
   <g>
    <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND)</title>
-   <circle style='fill: blue;' cx='239.880' cy='264.960' r='6.000'/></g>
+   <circle style='fill: red;' cx='239.880' cy='264.960' r='6.000'/></g>
+  <path
+   d='M 139.920 264.960 Q 92.340 300.660 44.759 336.359'
+   style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
+  <g>
+   <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN-0 RAND (hash (ltk UE HN) RAND)) RAND))</title>
+   <circle cx='139.920' cy='264.960' r='6.000'/></g>
   <path
    d='M 139.920 189.960 Q 236.880 152.460 333.840 189.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
-   <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN-0 RAND (hash (ltk UE HN) RAND)) RAND))</title>
-   <circle cx='139.920' cy='189.960' r='6.000'/></g>
+   <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN-0 RAND (hash (ltk UE HN) RAND)) SUPI-0)</title>
+   <circle style='fill: gray;' cx='139.920' cy='189.960' r='6.000'/></g>
   <g><title>(enc SUPI-0 (pubk HN) SN-0)</title>
    <circle style='fill: blue;' cx='139.920' cy='114.960' r='6.000'/></g>
   <g>
@@ -1162,7 +1197,7 @@
     (SN UE HN SN-0 name))
   (defstrand ServingNetwork 7 (SQN SQN) (SUPI SUPI) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 2 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN-0) (HN HN))
   (deflistener
     (cat
@@ -1170,7 +1205,7 @@
         RAND (hash (ltk UE HN) RAND)) RAND))
   (defstrand UserEquip 3 (SQN SQN-0) (SUPI SUPI-1) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (precedes ((1 1) (3 1)) ((2 1) (0 2)) ((3 2) (2 0)))
+  (precedes ((1 1) (3 1)) ((1 2) (0 2)) ((2 1) (0 2)) ((3 2) (2 0)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
   (operation encryption-test (added-strand UserEquip 3)
@@ -1178,7 +1213,7 @@
       (hash (ltk UE HN) RAND)) (2 0))
   (label 9)
   (parent 6)
-  (unrealized (0 6) (3 1))
+  (unrealized (0 6) (2 0) (3 1))
   (comment &quot;2 in cohort - 2 not yet seen&quot;))</pre>
 
 <p id="k10">Item <a href="#t3">10</a>, Parent: <a href="#k6">6</a>.</p>
@@ -1203,7 +1238,7 @@
    x1='239.880' y1='264.960' x2='239.880' y2='339.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='139.920' y1='114.960' x2='139.920' y2='189.960'
+   x1='139.920' y1='114.960' x2='139.920' y2='264.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
    x1='39.960' y1='189.960' x2='39.960' y2='639.960'
@@ -1227,11 +1262,17 @@
    <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND)</title>
    <circle style='fill: blue;' cx='239.880' cy='264.960' r='6.000'/></g>
   <path
-   d='M 139.920 189.960 Q 236.880 152.460 333.840 189.960'
+   d='M 139.920 264.960 Q 92.340 300.660 44.759 336.359'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN-0 RAND (hash (ltk UE HN) RAND)) RAND))</title>
-   <circle cx='139.920' cy='189.960' r='6.000'/></g>
+   <circle cx='139.920' cy='264.960' r='6.000'/></g>
+  <path
+   d='M 139.920 189.960 Q 236.880 152.460 333.840 189.960'
+   style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
+  <g>
+   <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN-0 RAND (hash (ltk UE HN) RAND)) SUPI-0)</title>
+   <circle style='fill: gray;' cx='139.920' cy='189.960' r='6.000'/></g>
   <g><title>(enc SUPI-0 (pubk HN) SN-0)</title>
    <circle style='fill: blue;' cx='139.920' cy='114.960' r='6.000'/></g>
   <g>
@@ -1271,7 +1312,7 @@
   (vars (SQN text) (SUPI RAND SUPI-0 data) (SN UE HN SN-0 name))
   (defstrand ServingNetwork 7 (SQN SQN) (SUPI SUPI) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 2 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN-0) (HN HN))
   (deflistener
     (cat
@@ -1280,7 +1321,7 @@
   (deflistener
     (cat (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND
       (hash (ltk UE HN) RAND)))
-  (precedes ((1 1) (3 0)) ((2 1) (0 2)) ((3 1) (2 0)))
+  (precedes ((1 1) (3 0)) ((1 2) (0 2)) ((2 1) (0 2)) ((3 1) (2 0)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
   (operation encryption-test
@@ -1311,34 +1352,37 @@
      style='stroke-width: 2; fill: none; stroke: black;'/></marker>
    </defs>
   <line
-   x1='239.880' y1='114.960' x2='239.880' y2='264.960'
+   x1='239.880' y1='189.960' x2='239.880' y2='339.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='139.920' y1='114.960' x2='139.920' y2='189.960'
+   x1='139.920' y1='114.960' x2='139.920' y2='264.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
    x1='39.960' y1='114.960' x2='39.960' y2='564.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <path
-   d='M 239.880 264.960 Q 142.320 300.660 44.759 411.359'
+   d='M 239.880 339.960 Q 142.729 338.906 45.578 412.852'
    style='stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle cx='239.880' cy='264.960' r='6.000'/></g>
+   <circle cx='239.880' cy='339.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN)))</title>
-   <circle style='fill: blue;' cx='239.880' cy='189.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='239.880' cy='264.960' r='6.000'/></g>
   <g><title>(enc SUPI-1 (pubk HN))</title>
-   <circle cx='239.880' cy='114.960' r='6.000'/></g>
+   <circle cx='239.880' cy='189.960' r='6.000'/></g>
   <path
-   d='M 139.920 189.960 Q 92.340 225.660 44.759 261.359'
+   d='M 139.920 264.960 Q 92.940 264.960 45.960 264.960'
    style='stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <path
-   d='M 139.920 189.960 Q 186.900 189.960 233.880 189.960'
+   d='M 139.920 264.960 Q 186.900 264.960 233.880 264.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
-   <circle cx='139.920' cy='189.960' r='6.000'/></g>
+   <circle cx='139.920' cy='264.960' r='6.000'/></g>
+  <g>
+   <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) SUPI-0)</title>
+   <circle style='fill: gray;' cx='139.920' cy='189.960' r='6.000'/></g>
   <g><title>(enc SUPI-0 (pubk HN) SN)</title>
    <circle style='fill: blue;' cx='139.920' cy='114.960' r='6.000'/></g>
   <g>
@@ -1383,14 +1427,14 @@
   (vars (SQN text) (SUPI RAND SUPI-0 SUPI-1 data) (UE HN SN name))
   (defstrand ServingNetwork 7 (SQN SQN) (SUPI SUPI) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 2 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (precedes ((1 1) (0 2)) ((1 1) (2 1)) ((2 2) (0 4)))
+  (precedes ((1 2) (0 2)) ((1 2) (2 1)) ((2 2) (0 4)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
-  (operation encryption-test (displaced 3 1 HomeNetwork 2)
+  (operation encryption-test (displaced 3 1 HomeNetwork 3)
     (hash SQN-0 (hash (ltk UE HN) RAND)) (2 1))
   (label 11)
   (parent 7)
@@ -1419,7 +1463,7 @@
    x1='239.880' y1='189.960' x2='239.880' y2='339.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='139.920' y1='114.960' x2='139.920' y2='189.960'
+   x1='139.920' y1='114.960' x2='139.920' y2='264.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
    x1='39.960' y1='114.960' x2='39.960' y2='564.960'
@@ -1443,14 +1487,17 @@
   <g><title>(enc SUPI-1 (pubk HN))</title>
    <circle cx='239.880' cy='189.960' r='6.000'/></g>
   <path
-   d='M 139.920 189.960 Q 92.340 225.660 44.759 261.359'
+   d='M 139.920 264.960 Q 92.940 264.960 45.960 264.960'
    style='stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
+  <g>
+   <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
+   <circle cx='139.920' cy='264.960' r='6.000'/></g>
   <path
    d='M 139.920 189.960 Q 236.880 152.460 333.840 189.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
-   <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
-   <circle cx='139.920' cy='189.960' r='6.000'/></g>
+   <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) SUPI-0)</title>
+   <circle style='fill: gray;' cx='139.920' cy='189.960' r='6.000'/></g>
   <g><title>(enc SUPI-0 (pubk HN) SN)</title>
    <circle style='fill: blue;' cx='139.920' cy='114.960' r='6.000'/></g>
   <g>
@@ -1495,12 +1542,12 @@
   (vars (SQN SQN-0 text) (SUPI RAND SUPI-0 SUPI-1 data) (UE HN SN name))
   (defstrand ServingNetwork 7 (SQN SQN) (SUPI SUPI) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 2 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
   (defstrand UserEquip 3 (SQN SQN-0) (SUPI SUPI-1) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
   (deflistener (cat SQN-0 (hash (ltk UE HN) RAND)))
-  (precedes ((1 1) (0 2)) ((1 1) (3 0)) ((2 2) (0 4)) ((3 1) (2 1)))
+  (precedes ((1 1) (3 0)) ((1 2) (0 2)) ((2 2) (0 4)) ((3 1) (2 1)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
   (operation encryption-test
@@ -1516,9 +1563,9 @@
 
 <div>
  <svg
-  class='diagram' width='379.800pt' height='679.920pt'
+  class='diagram' width='379.800pt' height='754.920pt'
   xmlns='http://www.w3.org/2000/svg' version='1.1'
-  viewBox='0 0 379.800 679.920' font-size='12.000'>
+  viewBox='0 0 379.800 754.920' font-size='12.000'>
   <defs>
    <marker
     id='arrow' orient='auto' markerWidth='5' markerHeight='10' refX='5'
@@ -1528,64 +1575,67 @@
      style='stroke-width: 2; fill: none; stroke: black;'/></marker>
    </defs>
   <line
-   x1='339.840' y1='114.960' x2='339.840' y2='264.960'
+   x1='339.840' y1='189.960' x2='339.840' y2='339.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='239.880' y1='264.960' x2='239.880' y2='339.960'
+   x1='239.880' y1='339.960' x2='239.880' y2='414.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='139.920' y1='114.960' x2='139.920' y2='189.960'
+   x1='139.920' y1='114.960' x2='139.920' y2='264.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='39.960' y1='189.960' x2='39.960' y2='639.960'
+   x1='39.960' y1='264.960' x2='39.960' y2='714.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <path
-   d='M 339.840 264.960 Q 292.860 264.960 245.880 264.960'
+   d='M 339.840 339.960 Q 292.860 339.960 245.880 339.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle cx='339.840' cy='264.960' r='6.000'/></g>
+   <circle cx='339.840' cy='339.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN)))</title>
-   <circle style='fill: blue;' cx='339.840' cy='189.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='339.840' cy='264.960' r='6.000'/></g>
   <g><title>(enc SUPI-1 (pubk HN))</title>
-   <circle cx='339.840' cy='114.960' r='6.000'/></g>
+   <circle cx='339.840' cy='189.960' r='6.000'/></g>
   <path
-   d='M 239.880 339.960 Q 142.920 302.460 45.960 339.960'
+   d='M 239.880 414.960 Q 142.920 377.460 45.960 414.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND)</title>
-   <circle cx='239.880' cy='339.960' r='6.000'/></g>
+   <circle cx='239.880' cy='414.960' r='6.000'/></g>
   <g>
    <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND)</title>
-   <circle style='fill: blue;' cx='239.880' cy='264.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='239.880' cy='339.960' r='6.000'/></g>
   <path
-   d='M 139.920 189.960 Q 236.880 152.460 333.840 189.960'
+   d='M 139.920 264.960 Q 236.880 227.460 333.840 264.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN-0 RAND (hash (ltk UE HN) RAND)) RAND))</title>
-   <circle cx='139.920' cy='189.960' r='6.000'/></g>
+   <circle cx='139.920' cy='264.960' r='6.000'/></g>
+  <g>
+   <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN-0 RAND (hash (ltk UE HN) RAND)) SUPI-0)</title>
+   <circle style='fill: gray;' cx='139.920' cy='189.960' r='6.000'/></g>
   <g><title>(enc SUPI-0 (pubk HN) SN-0)</title>
    <circle style='fill: blue;' cx='139.920' cy='114.960' r='6.000'/></g>
   <g>
    <title>(cat &quot;Success&quot; (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI)</title>
-   <circle style='fill: red;' cx='39.960' cy='639.960' r='6.000'/></g>
+   <circle style='fill: red;' cx='39.960' cy='714.960' r='6.000'/></g>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle cx='39.960' cy='564.960' r='6.000'/></g>
+   <circle cx='39.960' cy='639.960' r='6.000'/></g>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle style='fill: blue;' cx='39.960' cy='489.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='39.960' cy='564.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN)))</title>
-   <circle cx='39.960' cy='414.960' r='6.000'/></g>
+   <circle cx='39.960' cy='489.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
-   <circle style='fill: blue;' cx='39.960' cy='339.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='39.960' cy='414.960' r='6.000'/></g>
   <g><title>(enc SUPI (pubk HN) SN)</title>
-   <circle cx='39.960' cy='264.960' r='6.000'/></g>
+   <circle cx='39.960' cy='339.960' r='6.000'/></g>
   <g><title>(enc SUPI (pubk HN))</title>
-   <circle style='fill: blue;' cx='39.960' cy='189.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='39.960' cy='264.960' r='6.000'/></g>
   <g>
    <title>((SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE) (SN SN) (HN HN))</title>
    <text
@@ -1609,7 +1659,7 @@
   (vars (SQN text) (SUPI RAND SUPI-0 SUPI-1 data) (SN UE HN SN-0 name))
   (defstrand ServingNetwork 7 (SQN SQN) (SUPI SUPI) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 2 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN-0) (HN HN))
   (deflistener
     (cat
@@ -1617,10 +1667,10 @@
         RAND (hash (ltk UE HN) RAND)) RAND))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (precedes ((1 1) (3 1)) ((2 1) (0 2)) ((3 2) (2 0)))
+  (precedes ((1 2) (3 1)) ((2 1) (0 2)) ((3 2) (2 0)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
-  (operation encryption-test (displaced 4 1 HomeNetwork 2)
+  (operation encryption-test (displaced 4 1 HomeNetwork 3)
     (hash SQN-0 (hash (ltk UE HN) RAND)) (3 1))
   (label 13)
   (parent 9)
@@ -1652,7 +1702,7 @@
    x1='239.880' y1='339.960' x2='239.880' y2='414.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='139.920' y1='114.960' x2='139.920' y2='189.960'
+   x1='139.920' y1='114.960' x2='139.920' y2='264.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
    x1='39.960' y1='264.960' x2='39.960' y2='714.960'
@@ -1683,13 +1733,19 @@
    <circle cx='239.880' cy='414.960' r='6.000'/></g>
   <g>
    <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND)</title>
-   <circle style='fill: blue;' cx='239.880' cy='339.960' r='6.000'/></g>
+   <circle style='fill: red;' cx='239.880' cy='339.960' r='6.000'/></g>
+  <path
+   d='M 139.920 264.960 Q 91.604 337.464 43.287 409.967'
+   style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
+  <g>
+   <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN-0 RAND (hash (ltk UE HN) RAND)) RAND))</title>
+   <circle cx='139.920' cy='264.960' r='6.000'/></g>
   <path
    d='M 139.920 189.960 Q 286.860 152.460 433.800 189.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
-   <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN-0 RAND (hash (ltk UE HN) RAND)) RAND))</title>
-   <circle cx='139.920' cy='189.960' r='6.000'/></g>
+   <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN-0 RAND (hash (ltk UE HN) RAND)) SUPI-0)</title>
+   <circle style='fill: gray;' cx='139.920' cy='189.960' r='6.000'/></g>
   <g><title>(enc SUPI-0 (pubk HN) SN-0)</title>
    <circle style='fill: blue;' cx='139.920' cy='114.960' r='6.000'/></g>
   <g>
@@ -1735,7 +1791,7 @@
     (SN UE HN SN-0 name))
   (defstrand ServingNetwork 7 (SQN SQN) (SUPI SUPI) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 2 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN-0) (HN HN))
   (deflistener
     (cat
@@ -1744,7 +1800,8 @@
   (defstrand UserEquip 3 (SQN SQN-0) (SUPI SUPI-1) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
   (deflistener (cat SQN-0 (hash (ltk UE HN) RAND)))
-  (precedes ((1 1) (4 0)) ((2 1) (0 2)) ((3 2) (2 0)) ((4 1) (3 1)))
+  (precedes ((1 1) (4 0)) ((1 2) (0 2)) ((2 1) (0 2)) ((3 2) (2 0))
+    ((4 1) (3 1)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
   (operation encryption-test
@@ -1752,7 +1809,7 @@
     (hash SQN-0 (hash (ltk UE HN) RAND)) (3 1))
   (label 14)
   (parent 9)
-  (unrealized (3 1) (4 0))
+  (unrealized (2 0) (3 1) (4 0))
   (dead)
   (comment &quot;empty cohort&quot;))</pre>
 
@@ -1772,45 +1829,48 @@
      style='stroke-width: 2; fill: none; stroke: black;'/></marker>
    </defs>
   <line
-   x1='239.880' y1='114.960' x2='239.880' y2='339.960'
+   x1='239.880' y1='114.960' x2='239.880' y2='414.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='139.920' y1='114.960' x2='139.920' y2='264.960'
+   x1='139.920' y1='189.960' x2='139.920' y2='339.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
    x1='39.960' y1='114.960' x2='39.960' y2='564.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <path
-   d='M 239.880 339.960 Q 141.913 412.717 43.945 560.475'
+   d='M 239.880 414.960 Q 142.320 450.660 44.759 561.359'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(cat &quot;Success&quot; (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI-1)</title>
-   <circle cx='239.880' cy='339.960' r='6.000'/></g>
+   <circle cx='239.880' cy='414.960' r='6.000'/></g>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle style='fill: red;' cx='239.880' cy='264.960' r='6.000'/></g>
+   <circle style='fill: red;' cx='239.880' cy='339.960' r='6.000'/></g>
   <path
-   d='M 239.880 189.960 Q 142.729 188.906 45.578 262.852'
+   d='M 239.880 264.960 Q 142.920 227.460 45.960 264.960'
    style='stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <path
-   d='M 239.880 189.960 Q 192.900 189.960 145.920 189.960'
+   d='M 239.880 264.960 Q 192.900 264.960 145.920 264.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
-   <circle cx='239.880' cy='189.960' r='6.000'/></g>
+   <circle cx='239.880' cy='264.960' r='6.000'/></g>
+  <g>
+   <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) SUPI-1)</title>
+   <circle style='fill: gray;' cx='239.880' cy='189.960' r='6.000'/></g>
   <g><title>(enc SUPI-1 (pubk HN) SN)</title>
    <circle style='fill: blue;' cx='239.880' cy='114.960' r='6.000'/></g>
   <path
-   d='M 139.920 264.960 Q 91.604 337.464 43.287 409.967'
+   d='M 139.920 339.960 Q 92.340 375.660 44.759 411.359'
    style='stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle cx='139.920' cy='264.960' r='6.000'/></g>
+   <circle cx='139.920' cy='339.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN)))</title>
-   <circle style='fill: blue;' cx='139.920' cy='189.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='139.920' cy='264.960' r='6.000'/></g>
   <g><title>(enc SUPI-0 (pubk HN))</title>
-   <circle cx='139.920' cy='114.960' r='6.000'/></g>
+   <circle cx='139.920' cy='189.960' r='6.000'/></g>
   <g>
    <title>(cat &quot;Success&quot; (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI)</title>
    <circle style='fill: blue;' cx='39.960' cy='564.960' r='6.000'/></g>
@@ -1855,18 +1915,18 @@
     (SN SN) (HN HN))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 4 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 5 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (precedes ((1 2) (0 4)) ((2 1) (0 2)) ((2 1) (1 1)) ((2 3) (0 6)))
+  (precedes ((1 2) (0 4)) ((2 2) (0 2)) ((2 2) (1 1)) ((2 4) (0 6)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
-  (operation encryption-test (displaced 1 3 HomeNetwork 4)
+  (operation encryption-test (displaced 1 3 HomeNetwork 5)
     (hash
       (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
         (hash SQN (hash (ltk UE HN) RAND))) SN) (0 6))
   (label 15)
   (parent 11)
-  (unrealized (2 2))
+  (unrealized (2 3))
   (comment &quot;3 in cohort - 3 not yet seen&quot;))</pre>
 
 <p id="k16">Item <a href="#t3">16</a>, Parent: <a href="#k11">11</a>, Child: <a href="#k22">22</a>.</p>
@@ -1888,10 +1948,10 @@
    x1='339.840' y1='189.960' x2='339.840' y2='264.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='239.880' y1='114.960' x2='239.880' y2='264.960'
+   x1='239.880' y1='189.960' x2='239.880' y2='339.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='139.920' y1='114.960' x2='139.920' y2='189.960'
+   x1='139.920' y1='114.960' x2='139.920' y2='264.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
    x1='39.960' y1='114.960' x2='39.960' y2='564.960'
@@ -1906,28 +1966,31 @@
    <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN (hash SQN (hash (ltk UE HN) RAND))) SN)</title>
    <circle style='fill: red;' cx='339.840' cy='189.960' r='6.000'/></g>
   <path
-   d='M 239.880 264.960 Q 142.320 300.660 44.759 411.359'
+   d='M 239.880 339.960 Q 142.729 338.906 45.578 412.852'
    style='stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle cx='239.880' cy='264.960' r='6.000'/></g>
+   <circle cx='239.880' cy='339.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN)))</title>
-   <circle style='fill: blue;' cx='239.880' cy='189.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='239.880' cy='264.960' r='6.000'/></g>
   <g><title>(enc SUPI-1 (pubk HN))</title>
-   <circle cx='239.880' cy='114.960' r='6.000'/></g>
+   <circle cx='239.880' cy='189.960' r='6.000'/></g>
   <path
-   d='M 139.920 189.960 Q 92.340 225.660 44.759 261.359'
+   d='M 139.920 264.960 Q 92.940 264.960 45.960 264.960'
    style='stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <path
-   d='M 139.920 189.960 Q 186.900 189.960 233.880 189.960'
+   d='M 139.920 264.960 Q 186.900 264.960 233.880 264.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
+  <g>
+   <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
+   <circle cx='139.920' cy='264.960' r='6.000'/></g>
   <path
    d='M 139.920 189.960 Q 236.880 152.460 333.840 189.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
-   <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
-   <circle cx='139.920' cy='189.960' r='6.000'/></g>
+   <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) SUPI-0)</title>
+   <circle style='fill: gray;' cx='139.920' cy='189.960' r='6.000'/></g>
   <g><title>(enc SUPI-0 (pubk HN) SN)</title>
    <circle style='fill: blue;' cx='139.920' cy='114.960' r='6.000'/></g>
   <g>
@@ -1972,7 +2035,7 @@
   (vars (SQN text) (SUPI RAND SUPI-0 SUPI-1 data) (UE HN SN name))
   (defstrand ServingNetwork 7 (SQN SQN) (SUPI SUPI) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 2 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
@@ -1980,7 +2043,7 @@
     (cat
       (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
         (hash SQN (hash (ltk UE HN) RAND))) SN))
-  (precedes ((1 1) (0 2)) ((1 1) (2 1)) ((1 1) (3 0)) ((2 2) (0 4))
+  (precedes ((1 1) (3 0)) ((1 2) (0 2)) ((1 2) (2 1)) ((2 2) (0 4))
     ((3 1) (0 6)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
@@ -2001,9 +2064,9 @@
 
 <div>
  <svg
-  class='diagram' width='379.800pt' height='679.920pt'
+  class='diagram' width='379.800pt' height='754.920pt'
   xmlns='http://www.w3.org/2000/svg' version='1.1'
-  viewBox='0 0 379.800 679.920' font-size='12.000'>
+  viewBox='0 0 379.800 754.920' font-size='12.000'>
   <defs>
    <marker
     id='arrow' orient='auto' markerWidth='5' markerHeight='10' refX='5'
@@ -2013,73 +2076,76 @@
      style='stroke-width: 2; fill: none; stroke: black;'/></marker>
    </defs>
   <line
-   x1='339.840' y1='114.960' x2='339.840' y2='339.960'
+   x1='339.840' y1='114.960' x2='339.840' y2='414.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='239.880' y1='114.960' x2='239.880' y2='264.960'
+   x1='239.880' y1='189.960' x2='239.880' y2='339.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='139.920' y1='264.960' x2='139.920' y2='339.960'
+   x1='139.920' y1='339.960' x2='139.920' y2='414.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='39.960' y1='189.960' x2='39.960' y2='639.960'
+   x1='39.960' y1='264.960' x2='39.960' y2='714.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <path
-   d='M 339.840 339.960 Q 192.021 450.338 44.202 635.717'
+   d='M 339.840 414.960 Q 192.021 525.338 44.202 710.717'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(cat &quot;Success&quot; (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI-1)</title>
-   <circle cx='339.840' cy='339.960' r='6.000'/></g>
+   <circle cx='339.840' cy='414.960' r='6.000'/></g>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle style='fill: red;' cx='339.840' cy='264.960' r='6.000'/></g>
+   <circle style='fill: red;' cx='339.840' cy='339.960' r='6.000'/></g>
   <path
-   d='M 339.840 189.960 Q 292.860 189.960 245.880 189.960'
+   d='M 339.840 264.960 Q 292.860 264.960 245.880 264.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
-   <circle cx='339.840' cy='189.960' r='6.000'/></g>
+   <circle cx='339.840' cy='264.960' r='6.000'/></g>
+  <g>
+   <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) SUPI-1)</title>
+   <circle style='fill: gray;' cx='339.840' cy='189.960' r='6.000'/></g>
   <g><title>(enc SUPI-1 (pubk HN) SN)</title>
    <circle style='fill: blue;' cx='339.840' cy='114.960' r='6.000'/></g>
   <path
-   d='M 239.880 264.960 Q 192.900 264.960 145.920 264.960'
+   d='M 239.880 339.960 Q 192.900 339.960 145.920 339.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle cx='239.880' cy='264.960' r='6.000'/></g>
+   <circle cx='239.880' cy='339.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN)))</title>
-   <circle style='fill: blue;' cx='239.880' cy='189.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='239.880' cy='264.960' r='6.000'/></g>
   <g><title>(enc SUPI-0 (pubk HN))</title>
-   <circle cx='239.880' cy='114.960' r='6.000'/></g>
+   <circle cx='239.880' cy='189.960' r='6.000'/></g>
   <path
-   d='M 139.920 339.960 Q 92.940 339.960 45.960 339.960'
+   d='M 139.920 414.960 Q 92.940 414.960 45.960 414.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND)</title>
-   <circle cx='139.920' cy='339.960' r='6.000'/></g>
+   <circle cx='139.920' cy='414.960' r='6.000'/></g>
   <g>
    <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND)</title>
-   <circle style='fill: blue;' cx='139.920' cy='264.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='139.920' cy='339.960' r='6.000'/></g>
   <g>
    <title>(cat &quot;Success&quot; (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI)</title>
-   <circle style='fill: blue;' cx='39.960' cy='639.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='39.960' cy='714.960' r='6.000'/></g>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle cx='39.960' cy='564.960' r='6.000'/></g>
+   <circle cx='39.960' cy='639.960' r='6.000'/></g>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle style='fill: blue;' cx='39.960' cy='489.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='39.960' cy='564.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN)))</title>
-   <circle cx='39.960' cy='414.960' r='6.000'/></g>
+   <circle cx='39.960' cy='489.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
-   <circle style='fill: blue;' cx='39.960' cy='339.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='39.960' cy='414.960' r='6.000'/></g>
   <g><title>(enc SUPI (pubk HN) SN)</title>
-   <circle cx='39.960' cy='264.960' r='6.000'/></g>
+   <circle cx='39.960' cy='339.960' r='6.000'/></g>
   <g><title>(enc SUPI (pubk HN))</title>
-   <circle style='fill: blue;' cx='39.960' cy='189.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='39.960' cy='264.960' r='6.000'/></g>
   <g>
    <title>((SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE) (SN SN) (HN HN))</title>
    <text
@@ -2109,27 +2175,27 @@
         RAND (hash (ltk UE HN) RAND)) RAND))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 4 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 5 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (precedes ((1 1) (0 2)) ((2 2) (1 0)) ((3 1) (2 1)) ((3 3) (0 6)))
+  (precedes ((1 1) (0 2)) ((2 2) (1 0)) ((3 2) (2 1)) ((3 4) (0 6)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
-  (operation encryption-test (displaced 1 4 HomeNetwork 4)
+  (operation encryption-test (displaced 1 4 HomeNetwork 5)
     (hash
       (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
         (hash SQN (hash (ltk UE HN) RAND))) SN) (0 6))
   (label 17)
   (parent 13)
-  (unrealized (3 2))
+  (unrealized (3 3))
   (comment &quot;3 in cohort - 3 not yet seen&quot;))</pre>
 
 <p id="k18">Item <a href="#t3">18</a>, Parent: <a href="#k13">13</a>, Child: <a href="#k26">26</a>.</p>
 
 <div>
  <svg
-  class='diagram' width='479.760pt' height='679.920pt'
+  class='diagram' width='479.760pt' height='754.920pt'
   xmlns='http://www.w3.org/2000/svg' version='1.1'
-  viewBox='0 0 479.760 679.920' font-size='12.000'>
+  viewBox='0 0 479.760 754.920' font-size='12.000'>
   <defs>
    <marker
     id='arrow' orient='auto' markerWidth='5' markerHeight='10' refX='5'
@@ -2142,19 +2208,19 @@
    x1='439.800' y1='189.960' x2='439.800' y2='264.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='339.840' y1='114.960' x2='339.840' y2='264.960'
+   x1='339.840' y1='189.960' x2='339.840' y2='339.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='239.880' y1='264.960' x2='239.880' y2='339.960'
+   x1='239.880' y1='339.960' x2='239.880' y2='414.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='139.920' y1='114.960' x2='139.920' y2='189.960'
+   x1='139.920' y1='114.960' x2='139.920' y2='264.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='39.960' y1='189.960' x2='39.960' y2='639.960'
+   x1='39.960' y1='264.960' x2='39.960' y2='714.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <path
-   d='M 439.800 264.960 Q 242.068 412.908 44.336 635.855'
+   d='M 439.800 264.960 Q 241.873 450.217 43.945 710.475'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN (hash SQN (hash (ltk UE HN) RAND))) SN)</title>
@@ -2163,55 +2229,58 @@
    <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN (hash SQN (hash (ltk UE HN) RAND))) SN)</title>
    <circle style='fill: red;' cx='439.800' cy='189.960' r='6.000'/></g>
   <path
-   d='M 339.840 264.960 Q 292.860 264.960 245.880 264.960'
+   d='M 339.840 339.960 Q 292.860 339.960 245.880 339.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle cx='339.840' cy='264.960' r='6.000'/></g>
+   <circle cx='339.840' cy='339.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN)))</title>
-   <circle style='fill: blue;' cx='339.840' cy='189.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='339.840' cy='264.960' r='6.000'/></g>
   <g><title>(enc SUPI-1 (pubk HN))</title>
-   <circle cx='339.840' cy='114.960' r='6.000'/></g>
+   <circle cx='339.840' cy='189.960' r='6.000'/></g>
   <path
-   d='M 239.880 339.960 Q 142.920 302.460 45.960 339.960'
+   d='M 239.880 414.960 Q 142.920 377.460 45.960 414.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND)</title>
-   <circle cx='239.880' cy='339.960' r='6.000'/></g>
+   <circle cx='239.880' cy='414.960' r='6.000'/></g>
   <g>
    <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND)</title>
-   <circle style='fill: blue;' cx='239.880' cy='264.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='239.880' cy='339.960' r='6.000'/></g>
   <path
-   d='M 139.920 189.960 Q 236.880 152.460 333.840 189.960'
+   d='M 139.920 264.960 Q 236.880 227.460 333.840 264.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
+  <g>
+   <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN-0 RAND (hash (ltk UE HN) RAND)) RAND))</title>
+   <circle cx='139.920' cy='264.960' r='6.000'/></g>
   <path
    d='M 139.920 189.960 Q 286.860 152.460 433.800 189.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
-   <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN-0 RAND (hash (ltk UE HN) RAND)) RAND))</title>
-   <circle cx='139.920' cy='189.960' r='6.000'/></g>
+   <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN-0 RAND (hash (ltk UE HN) RAND)) SUPI-0)</title>
+   <circle style='fill: gray;' cx='139.920' cy='189.960' r='6.000'/></g>
   <g><title>(enc SUPI-0 (pubk HN) SN-0)</title>
    <circle style='fill: blue;' cx='139.920' cy='114.960' r='6.000'/></g>
   <g>
    <title>(cat &quot;Success&quot; (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI)</title>
-   <circle style='fill: blue;' cx='39.960' cy='639.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='39.960' cy='714.960' r='6.000'/></g>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle cx='39.960' cy='564.960' r='6.000'/></g>
+   <circle cx='39.960' cy='639.960' r='6.000'/></g>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle style='fill: blue;' cx='39.960' cy='489.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='39.960' cy='564.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN)))</title>
-   <circle cx='39.960' cy='414.960' r='6.000'/></g>
+   <circle cx='39.960' cy='489.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
-   <circle style='fill: blue;' cx='39.960' cy='339.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='39.960' cy='414.960' r='6.000'/></g>
   <g><title>(enc SUPI (pubk HN) SN)</title>
-   <circle cx='39.960' cy='264.960' r='6.000'/></g>
+   <circle cx='39.960' cy='339.960' r='6.000'/></g>
   <g><title>(enc SUPI (pubk HN))</title>
-   <circle style='fill: blue;' cx='39.960' cy='189.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='39.960' cy='264.960' r='6.000'/></g>
   <g>
    <title>((SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE) (SN SN) (HN HN))</title>
    <text
@@ -2235,7 +2304,7 @@
   (vars (SQN text) (SUPI RAND SUPI-0 SUPI-1 data) (SN UE HN SN-0 name))
   (defstrand ServingNetwork 7 (SQN SQN) (SUPI SUPI) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 2 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN-0) (HN HN))
   (deflistener
     (cat
@@ -2247,7 +2316,7 @@
     (cat
       (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
         (hash SQN (hash (ltk UE HN) RAND))) SN))
-  (precedes ((1 1) (3 1)) ((1 1) (4 0)) ((2 1) (0 2)) ((3 2) (2 0))
+  (precedes ((1 1) (4 0)) ((1 2) (3 1)) ((2 1) (0 2)) ((3 2) (2 0))
     ((4 1) (0 6)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
@@ -2280,48 +2349,51 @@
      style='stroke-width: 2; fill: none; stroke: black;'/></marker>
    </defs>
   <line
-   x1='239.880' y1='114.960' x2='239.880' y2='339.960'
+   x1='239.880' y1='114.960' x2='239.880' y2='414.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='139.920' y1='114.960' x2='139.920' y2='264.960'
+   x1='139.920' y1='189.960' x2='139.920' y2='339.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
    x1='39.960' y1='114.960' x2='39.960' y2='564.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <path
-   d='M 239.880 339.960 Q 141.913 412.717 43.945 560.475'
+   d='M 239.880 414.960 Q 142.320 450.660 44.759 561.359'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(cat &quot;Success&quot; (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI-1)</title>
-   <circle cx='239.880' cy='339.960' r='6.000'/></g>
+   <circle cx='239.880' cy='414.960' r='6.000'/></g>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle style='fill: blue;' cx='239.880' cy='264.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='239.880' cy='339.960' r='6.000'/></g>
   <path
-   d='M 239.880 189.960 Q 142.729 188.906 45.578 262.852'
+   d='M 239.880 264.960 Q 142.920 227.460 45.960 264.960'
    style='stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <path
-   d='M 239.880 189.960 Q 192.900 189.960 145.920 189.960'
+   d='M 239.880 264.960 Q 192.900 264.960 145.920 264.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
-   <circle cx='239.880' cy='189.960' r='6.000'/></g>
+   <circle cx='239.880' cy='264.960' r='6.000'/></g>
+  <g>
+   <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) SUPI-1)</title>
+   <circle style='fill: gray;' cx='239.880' cy='189.960' r='6.000'/></g>
   <g><title>(enc SUPI-1 (pubk HN) SN)</title>
    <circle style='fill: blue;' cx='239.880' cy='114.960' r='6.000'/></g>
   <path
-   d='M 139.920 264.960 Q 91.604 337.464 43.287 409.967'
+   d='M 139.920 339.960 Q 92.340 375.660 44.759 411.359'
    style='stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <path
-   d='M 139.920 264.960 Q 186.900 264.960 233.880 264.960'
+   d='M 139.920 339.960 Q 186.900 339.960 233.880 339.960'
    style='stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle cx='139.920' cy='264.960' r='6.000'/></g>
+   <circle cx='139.920' cy='339.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN)))</title>
-   <circle style='fill: blue;' cx='139.920' cy='189.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='139.920' cy='264.960' r='6.000'/></g>
   <g><title>(enc SUPI-0 (pubk HN))</title>
-   <circle cx='139.920' cy='114.960' r='6.000'/></g>
+   <circle cx='139.920' cy='189.960' r='6.000'/></g>
   <g>
    <title>(cat &quot;Success&quot; (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI)</title>
    <circle style='fill: blue;' cx='39.960' cy='564.960' r='6.000'/></g>
@@ -2366,15 +2438,15 @@
     (SN SN) (HN HN))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 4 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 5 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (precedes ((1 2) (0 4)) ((1 2) (2 2)) ((2 1) (0 2)) ((2 1) (1 1))
-    ((2 3) (0 6)))
+  (precedes ((1 2) (0 4)) ((1 2) (2 3)) ((2 2) (0 2)) ((2 2) (1 1))
+    ((2 4) (0 6)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
   (operation encryption-test (displaced 3 1 UserEquip 3)
     (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND
-      (hash (ltk UE HN) RAND)) (2 2))
+      (hash (ltk UE HN) RAND)) (2 3))
   (label 19)
   (parent 15)
   (unrealized)
@@ -2402,16 +2474,16 @@
    x1='339.840' y1='114.960' x2='339.840' y2='264.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='239.880' y1='114.960' x2='239.880' y2='339.960'
+   x1='239.880' y1='114.960' x2='239.880' y2='414.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='139.920' y1='114.960' x2='139.920' y2='264.960'
+   x1='139.920' y1='189.960' x2='139.920' y2='339.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
    x1='39.960' y1='114.960' x2='39.960' y2='564.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <path
-   d='M 339.840 264.960 Q 292.860 264.960 245.880 264.960'
+   d='M 339.840 264.960 Q 292.260 300.660 244.679 336.359'
    style='stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
@@ -2422,39 +2494,42 @@
   <g><title>(enc SUPI-2 (pubk HN))</title>
    <circle cx='339.840' cy='114.960' r='6.000'/></g>
   <path
-   d='M 239.880 339.960 Q 141.913 412.717 43.945 560.475'
+   d='M 239.880 414.960 Q 142.320 450.660 44.759 561.359'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(cat &quot;Success&quot; (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI-1)</title>
-   <circle cx='239.880' cy='339.960' r='6.000'/></g>
+   <circle cx='239.880' cy='414.960' r='6.000'/></g>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle style='fill: blue;' cx='239.880' cy='264.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='239.880' cy='339.960' r='6.000'/></g>
   <path
-   d='M 239.880 189.960 Q 142.729 188.906 45.578 262.852'
+   d='M 239.880 264.960 Q 142.920 227.460 45.960 264.960'
    style='stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <path
-   d='M 239.880 189.960 Q 192.900 189.960 145.920 189.960'
+   d='M 239.880 264.960 Q 192.900 264.960 145.920 264.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
+  <g>
+   <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
+   <circle cx='239.880' cy='264.960' r='6.000'/></g>
   <path
    d='M 239.880 189.960 Q 286.860 189.960 333.840 189.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
-   <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
-   <circle cx='239.880' cy='189.960' r='6.000'/></g>
+   <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) SUPI-1)</title>
+   <circle style='fill: gray;' cx='239.880' cy='189.960' r='6.000'/></g>
   <g><title>(enc SUPI-1 (pubk HN) SN)</title>
    <circle style='fill: blue;' cx='239.880' cy='114.960' r='6.000'/></g>
   <path
-   d='M 139.920 264.960 Q 91.604 337.464 43.287 409.967'
+   d='M 139.920 339.960 Q 92.340 375.660 44.759 411.359'
    style='stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle cx='139.920' cy='264.960' r='6.000'/></g>
+   <circle cx='139.920' cy='339.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN)))</title>
-   <circle style='fill: blue;' cx='139.920' cy='189.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='139.920' cy='264.960' r='6.000'/></g>
   <g><title>(enc SUPI-0 (pubk HN))</title>
-   <circle cx='139.920' cy='114.960' r='6.000'/></g>
+   <circle cx='139.920' cy='189.960' r='6.000'/></g>
   <g>
    <title>(cat &quot;Success&quot; (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI)</title>
    <circle style='fill: blue;' cx='39.960' cy='564.960' r='6.000'/></g>
@@ -2505,17 +2580,17 @@
     (SN SN) (HN HN))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 4 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 5 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
   (defstrand UserEquip 3 (SQN SQN-0) (SUPI SUPI-2) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (precedes ((1 2) (0 4)) ((2 1) (0 2)) ((2 1) (1 1)) ((2 1) (3 1))
-    ((2 3) (0 6)) ((3 2) (2 2)))
+  (precedes ((1 2) (0 4)) ((2 1) (3 1)) ((2 2) (0 2)) ((2 2) (1 1))
+    ((2 4) (0 6)) ((3 2) (2 3)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
   (operation encryption-test (added-strand UserEquip 3)
     (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND
-      (hash (ltk UE HN) RAND)) (2 2))
+      (hash (ltk UE HN) RAND)) (2 3))
   (label 20)
   (parent 15)
   (unrealized (3 1))
@@ -2540,16 +2615,16 @@
    x1='339.840' y1='189.960' x2='339.840' y2='264.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='239.880' y1='114.960' x2='239.880' y2='339.960'
+   x1='239.880' y1='114.960' x2='239.880' y2='414.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='139.920' y1='114.960' x2='139.920' y2='264.960'
+   x1='139.920' y1='189.960' x2='139.920' y2='339.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
    x1='39.960' y1='114.960' x2='39.960' y2='564.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <path
-   d='M 339.840 264.960 Q 292.860 264.960 245.880 264.960'
+   d='M 339.840 264.960 Q 292.260 300.660 244.679 336.359'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(cat (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
@@ -2558,39 +2633,42 @@
    <title>(cat (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
    <circle style='fill: red;' cx='339.840' cy='189.960' r='6.000'/></g>
   <path
-   d='M 239.880 339.960 Q 141.913 412.717 43.945 560.475'
+   d='M 239.880 414.960 Q 142.320 450.660 44.759 561.359'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(cat &quot;Success&quot; (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI-1)</title>
-   <circle cx='239.880' cy='339.960' r='6.000'/></g>
+   <circle cx='239.880' cy='414.960' r='6.000'/></g>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle style='fill: blue;' cx='239.880' cy='264.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='239.880' cy='339.960' r='6.000'/></g>
   <path
-   d='M 239.880 189.960 Q 142.729 188.906 45.578 262.852'
+   d='M 239.880 264.960 Q 142.920 227.460 45.960 264.960'
    style='stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <path
-   d='M 239.880 189.960 Q 192.900 189.960 145.920 189.960'
+   d='M 239.880 264.960 Q 192.900 264.960 145.920 264.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
+  <g>
+   <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
+   <circle cx='239.880' cy='264.960' r='6.000'/></g>
   <path
    d='M 239.880 189.960 Q 286.860 189.960 333.840 189.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
-   <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
-   <circle cx='239.880' cy='189.960' r='6.000'/></g>
+   <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) SUPI-1)</title>
+   <circle style='fill: gray;' cx='239.880' cy='189.960' r='6.000'/></g>
   <g><title>(enc SUPI-1 (pubk HN) SN)</title>
    <circle style='fill: blue;' cx='239.880' cy='114.960' r='6.000'/></g>
   <path
-   d='M 139.920 264.960 Q 91.604 337.464 43.287 409.967'
+   d='M 139.920 339.960 Q 92.340 375.660 44.759 411.359'
    style='stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle cx='139.920' cy='264.960' r='6.000'/></g>
+   <circle cx='139.920' cy='339.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN)))</title>
-   <circle style='fill: blue;' cx='139.920' cy='189.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='139.920' cy='264.960' r='6.000'/></g>
   <g><title>(enc SUPI-0 (pubk HN))</title>
-   <circle cx='139.920' cy='114.960' r='6.000'/></g>
+   <circle cx='139.920' cy='189.960' r='6.000'/></g>
   <g>
    <title>(cat &quot;Success&quot; (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI)</title>
    <circle style='fill: blue;' cx='39.960' cy='564.960' r='6.000'/></g>
@@ -2635,13 +2713,13 @@
     (SN SN) (HN HN))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 4 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 5 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
   (deflistener
     (cat (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND
       (hash (ltk UE HN) RAND)))
-  (precedes ((1 2) (0 4)) ((2 1) (0 2)) ((2 1) (1 1)) ((2 1) (3 0))
-    ((2 3) (0 6)) ((3 1) (2 2)))
+  (precedes ((1 2) (0 4)) ((2 1) (3 0)) ((2 2) (0 2)) ((2 2) (1 1))
+    ((2 4) (0 6)) ((3 1) (2 3)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
   (operation encryption-test
@@ -2649,7 +2727,7 @@
       (cat (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND
         (hash (ltk UE HN) RAND)))
     (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND
-      (hash (ltk UE HN) RAND)) (2 2))
+      (hash (ltk UE HN) RAND)) (2 3))
   (label 21)
   (parent 15)
   (unrealized (3 0))
@@ -2678,10 +2756,10 @@
    x1='339.840' y1='264.960' x2='339.840' y2='339.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='239.880' y1='114.960' x2='239.880' y2='264.960'
+   x1='239.880' y1='189.960' x2='239.880' y2='339.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='139.920' y1='114.960' x2='139.920' y2='189.960'
+   x1='139.920' y1='114.960' x2='139.920' y2='264.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
    x1='39.960' y1='114.960' x2='39.960' y2='564.960'
@@ -2705,28 +2783,31 @@
    <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN (hash SQN (hash (ltk UE HN) RAND))) SN)</title>
    <circle style='fill: blue;' cx='339.840' cy='264.960' r='6.000'/></g>
   <path
-   d='M 239.880 264.960 Q 142.320 300.660 44.759 411.359'
+   d='M 239.880 339.960 Q 142.729 338.906 45.578 412.852'
    style='stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle cx='239.880' cy='264.960' r='6.000'/></g>
+   <circle cx='239.880' cy='339.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN)))</title>
-   <circle style='fill: blue;' cx='239.880' cy='189.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='239.880' cy='264.960' r='6.000'/></g>
   <g><title>(enc SUPI-1 (pubk HN))</title>
-   <circle cx='239.880' cy='114.960' r='6.000'/></g>
+   <circle cx='239.880' cy='189.960' r='6.000'/></g>
   <path
-   d='M 139.920 189.960 Q 92.340 225.660 44.759 261.359'
+   d='M 139.920 264.960 Q 92.940 264.960 45.960 264.960'
    style='stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <path
-   d='M 139.920 189.960 Q 186.900 189.960 233.880 189.960'
+   d='M 139.920 264.960 Q 186.900 264.960 233.880 264.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
+  <g>
+   <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
+   <circle cx='139.920' cy='264.960' r='6.000'/></g>
   <path
    d='M 139.920 189.960 Q 286.860 152.460 433.800 189.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
-   <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
-   <circle cx='139.920' cy='189.960' r='6.000'/></g>
+   <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) SUPI-0)</title>
+   <circle style='fill: gray;' cx='139.920' cy='189.960' r='6.000'/></g>
   <g><title>(enc SUPI-0 (pubk HN) SN)</title>
    <circle style='fill: blue;' cx='139.920' cy='114.960' r='6.000'/></g>
   <g>
@@ -2771,7 +2852,7 @@
   (vars (SQN text) (SUPI RAND SUPI-0 SUPI-1 data) (UE HN SN name))
   (defstrand ServingNetwork 7 (SQN SQN) (SUPI SUPI) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 2 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
@@ -2782,7 +2863,7 @@
   (deflistener
     (cat (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
       (hash SQN (hash (ltk UE HN) RAND))))
-  (precedes ((1 1) (0 2)) ((1 1) (2 1)) ((1 1) (4 0)) ((2 2) (0 4))
+  (precedes ((1 1) (4 0)) ((1 2) (0 2)) ((1 2) (2 1)) ((2 2) (0 4))
     ((3 1) (0 6)) ((4 1) (3 0)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
@@ -2802,9 +2883,9 @@
 
 <div>
  <svg
-  class='diagram' width='379.800pt' height='679.920pt'
+  class='diagram' width='379.800pt' height='754.920pt'
   xmlns='http://www.w3.org/2000/svg' version='1.1'
-  viewBox='0 0 379.800 679.920' font-size='12.000'>
+  viewBox='0 0 379.800 754.920' font-size='12.000'>
   <defs>
    <marker
     id='arrow' orient='auto' markerWidth='5' markerHeight='10' refX='5'
@@ -2814,76 +2895,79 @@
      style='stroke-width: 2; fill: none; stroke: black;'/></marker>
    </defs>
   <line
-   x1='339.840' y1='114.960' x2='339.840' y2='339.960'
+   x1='339.840' y1='114.960' x2='339.840' y2='414.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='239.880' y1='114.960' x2='239.880' y2='264.960'
+   x1='239.880' y1='189.960' x2='239.880' y2='339.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='139.920' y1='264.960' x2='139.920' y2='339.960'
+   x1='139.920' y1='339.960' x2='139.920' y2='414.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='39.960' y1='189.960' x2='39.960' y2='639.960'
+   x1='39.960' y1='264.960' x2='39.960' y2='714.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <path
-   d='M 339.840 339.960 Q 192.021 450.338 44.202 635.717'
+   d='M 339.840 414.960 Q 192.021 525.338 44.202 710.717'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(cat &quot;Success&quot; (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI-1)</title>
-   <circle cx='339.840' cy='339.960' r='6.000'/></g>
+   <circle cx='339.840' cy='414.960' r='6.000'/></g>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle style='fill: blue;' cx='339.840' cy='264.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='339.840' cy='339.960' r='6.000'/></g>
   <path
-   d='M 339.840 189.960 Q 292.860 189.960 245.880 189.960'
+   d='M 339.840 264.960 Q 292.860 264.960 245.880 264.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
-   <circle cx='339.840' cy='189.960' r='6.000'/></g>
+   <circle cx='339.840' cy='264.960' r='6.000'/></g>
+  <g>
+   <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) SUPI-1)</title>
+   <circle style='fill: gray;' cx='339.840' cy='189.960' r='6.000'/></g>
   <g><title>(enc SUPI-1 (pubk HN) SN)</title>
    <circle style='fill: blue;' cx='339.840' cy='114.960' r='6.000'/></g>
   <path
-   d='M 239.880 264.960 Q 192.900 264.960 145.920 264.960'
+   d='M 239.880 339.960 Q 192.900 339.960 145.920 339.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <path
-   d='M 239.880 264.960 Q 286.860 264.960 333.840 264.960'
+   d='M 239.880 339.960 Q 286.860 339.960 333.840 339.960'
    style='stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle cx='239.880' cy='264.960' r='6.000'/></g>
+   <circle cx='239.880' cy='339.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN)))</title>
-   <circle style='fill: blue;' cx='239.880' cy='189.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='239.880' cy='264.960' r='6.000'/></g>
   <g><title>(enc SUPI-0 (pubk HN))</title>
-   <circle cx='239.880' cy='114.960' r='6.000'/></g>
+   <circle cx='239.880' cy='189.960' r='6.000'/></g>
   <path
-   d='M 139.920 339.960 Q 92.940 339.960 45.960 339.960'
+   d='M 139.920 414.960 Q 92.940 414.960 45.960 414.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND)</title>
-   <circle cx='139.920' cy='339.960' r='6.000'/></g>
+   <circle cx='139.920' cy='414.960' r='6.000'/></g>
   <g>
    <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND)</title>
-   <circle style='fill: blue;' cx='139.920' cy='264.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='139.920' cy='339.960' r='6.000'/></g>
   <g>
    <title>(cat &quot;Success&quot; (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI)</title>
-   <circle style='fill: blue;' cx='39.960' cy='639.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='39.960' cy='714.960' r='6.000'/></g>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle cx='39.960' cy='564.960' r='6.000'/></g>
+   <circle cx='39.960' cy='639.960' r='6.000'/></g>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle style='fill: blue;' cx='39.960' cy='489.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='39.960' cy='564.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN)))</title>
-   <circle cx='39.960' cy='414.960' r='6.000'/></g>
+   <circle cx='39.960' cy='489.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
-   <circle style='fill: blue;' cx='39.960' cy='339.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='39.960' cy='414.960' r='6.000'/></g>
   <g><title>(enc SUPI (pubk HN) SN)</title>
-   <circle cx='39.960' cy='264.960' r='6.000'/></g>
+   <circle cx='39.960' cy='339.960' r='6.000'/></g>
   <g><title>(enc SUPI (pubk HN))</title>
-   <circle style='fill: blue;' cx='39.960' cy='189.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='39.960' cy='264.960' r='6.000'/></g>
   <g>
    <title>((SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE) (SN SN) (HN HN))</title>
    <text
@@ -2913,15 +2997,15 @@
         RAND (hash (ltk UE HN) RAND)) RAND))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 4 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 5 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (precedes ((1 1) (0 2)) ((2 2) (1 0)) ((2 2) (3 2)) ((3 1) (2 1))
-    ((3 3) (0 6)))
+  (precedes ((1 1) (0 2)) ((2 2) (1 0)) ((2 2) (3 3)) ((3 2) (2 1))
+    ((3 4) (0 6)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
   (operation encryption-test (displaced 4 2 UserEquip 3)
     (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND
-      (hash (ltk UE HN) RAND)) (3 2))
+      (hash (ltk UE HN) RAND)) (3 3))
   (label 23)
   (parent 17)
   (unrealized)
@@ -2931,9 +3015,9 @@
 
 <div>
  <svg
-  class='diagram' width='479.760pt' height='679.920pt'
+  class='diagram' width='479.760pt' height='754.920pt'
   xmlns='http://www.w3.org/2000/svg' version='1.1'
-  viewBox='0 0 479.760 679.920' font-size='12.000'>
+  viewBox='0 0 479.760 754.920' font-size='12.000'>
   <defs>
    <marker
     id='arrow' orient='auto' markerWidth='5' markerHeight='10' refX='5'
@@ -2946,19 +3030,19 @@
    x1='439.800' y1='114.960' x2='439.800' y2='264.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='339.840' y1='114.960' x2='339.840' y2='339.960'
+   x1='339.840' y1='114.960' x2='339.840' y2='414.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='239.880' y1='114.960' x2='239.880' y2='264.960'
+   x1='239.880' y1='189.960' x2='239.880' y2='339.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='139.920' y1='264.960' x2='139.920' y2='339.960'
+   x1='139.920' y1='339.960' x2='139.920' y2='414.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='39.960' y1='189.960' x2='39.960' y2='639.960'
+   x1='39.960' y1='264.960' x2='39.960' y2='714.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <path
-   d='M 439.800 264.960 Q 392.820 264.960 345.840 264.960'
+   d='M 439.800 264.960 Q 392.220 300.660 344.639 336.359'
    style='stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
@@ -2969,64 +3053,67 @@
   <g><title>(enc SUPI-2 (pubk HN))</title>
    <circle cx='439.800' cy='114.960' r='6.000'/></g>
   <path
-   d='M 339.840 339.960 Q 192.021 450.338 44.202 635.717'
+   d='M 339.840 414.960 Q 192.021 525.338 44.202 710.717'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(cat &quot;Success&quot; (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI-1)</title>
-   <circle cx='339.840' cy='339.960' r='6.000'/></g>
+   <circle cx='339.840' cy='414.960' r='6.000'/></g>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle style='fill: blue;' cx='339.840' cy='264.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='339.840' cy='339.960' r='6.000'/></g>
   <path
-   d='M 339.840 189.960 Q 292.860 189.960 245.880 189.960'
+   d='M 339.840 264.960 Q 292.860 264.960 245.880 264.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
+  <g>
+   <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
+   <circle cx='339.840' cy='264.960' r='6.000'/></g>
   <path
    d='M 339.840 189.960 Q 386.820 189.960 433.800 189.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
-   <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
-   <circle cx='339.840' cy='189.960' r='6.000'/></g>
+   <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) SUPI-1)</title>
+   <circle style='fill: gray;' cx='339.840' cy='189.960' r='6.000'/></g>
   <g><title>(enc SUPI-1 (pubk HN) SN)</title>
    <circle style='fill: blue;' cx='339.840' cy='114.960' r='6.000'/></g>
   <path
-   d='M 239.880 264.960 Q 192.900 264.960 145.920 264.960'
+   d='M 239.880 339.960 Q 192.900 339.960 145.920 339.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle cx='239.880' cy='264.960' r='6.000'/></g>
+   <circle cx='239.880' cy='339.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN)))</title>
-   <circle style='fill: blue;' cx='239.880' cy='189.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='239.880' cy='264.960' r='6.000'/></g>
   <g><title>(enc SUPI-0 (pubk HN))</title>
-   <circle cx='239.880' cy='114.960' r='6.000'/></g>
+   <circle cx='239.880' cy='189.960' r='6.000'/></g>
   <path
-   d='M 139.920 339.960 Q 92.940 339.960 45.960 339.960'
+   d='M 139.920 414.960 Q 92.940 414.960 45.960 414.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND)</title>
-   <circle cx='139.920' cy='339.960' r='6.000'/></g>
+   <circle cx='139.920' cy='414.960' r='6.000'/></g>
   <g>
    <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND)</title>
-   <circle style='fill: blue;' cx='139.920' cy='264.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='139.920' cy='339.960' r='6.000'/></g>
   <g>
    <title>(cat &quot;Success&quot; (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI)</title>
-   <circle style='fill: blue;' cx='39.960' cy='639.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='39.960' cy='714.960' r='6.000'/></g>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle cx='39.960' cy='564.960' r='6.000'/></g>
+   <circle cx='39.960' cy='639.960' r='6.000'/></g>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle style='fill: blue;' cx='39.960' cy='489.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='39.960' cy='564.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN)))</title>
-   <circle cx='39.960' cy='414.960' r='6.000'/></g>
+   <circle cx='39.960' cy='489.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
-   <circle style='fill: blue;' cx='39.960' cy='339.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='39.960' cy='414.960' r='6.000'/></g>
   <g><title>(enc SUPI (pubk HN) SN)</title>
-   <circle cx='39.960' cy='264.960' r='6.000'/></g>
+   <circle cx='39.960' cy='339.960' r='6.000'/></g>
   <g><title>(enc SUPI (pubk HN))</title>
-   <circle style='fill: blue;' cx='39.960' cy='189.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='39.960' cy='264.960' r='6.000'/></g>
   <g>
    <title>((SQN SQN-0) (SUPI SUPI-2) (RAND RAND) (UE UE) (SN SN) (HN HN))</title>
    <text
@@ -3062,17 +3149,17 @@
         RAND (hash (ltk UE HN) RAND)) RAND))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 4 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 5 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
   (defstrand UserEquip 3 (SQN SQN-0) (SUPI SUPI-2) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (precedes ((1 1) (0 2)) ((2 2) (1 0)) ((3 1) (2 1)) ((3 1) (4 1))
-    ((3 3) (0 6)) ((4 2) (3 2)))
+  (precedes ((1 1) (0 2)) ((2 2) (1 0)) ((3 1) (4 1)) ((3 2) (2 1))
+    ((3 4) (0 6)) ((4 2) (3 3)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
   (operation encryption-test (added-strand UserEquip 3)
     (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND
-      (hash (ltk UE HN) RAND)) (3 2))
+      (hash (ltk UE HN) RAND)) (3 3))
   (label 24)
   (parent 17)
   (unrealized (4 1))
@@ -3082,9 +3169,9 @@
 
 <div>
  <svg
-  class='diagram' width='479.760pt' height='679.920pt'
+  class='diagram' width='479.760pt' height='754.920pt'
   xmlns='http://www.w3.org/2000/svg' version='1.1'
-  viewBox='0 0 479.760 679.920' font-size='12.000'>
+  viewBox='0 0 479.760 754.920' font-size='12.000'>
   <defs>
    <marker
     id='arrow' orient='auto' markerWidth='5' markerHeight='10' refX='5'
@@ -3097,19 +3184,19 @@
    x1='439.800' y1='189.960' x2='439.800' y2='264.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='339.840' y1='114.960' x2='339.840' y2='339.960'
+   x1='339.840' y1='114.960' x2='339.840' y2='414.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='239.880' y1='114.960' x2='239.880' y2='264.960'
+   x1='239.880' y1='189.960' x2='239.880' y2='339.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='139.920' y1='264.960' x2='139.920' y2='339.960'
+   x1='139.920' y1='339.960' x2='139.920' y2='414.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='39.960' y1='189.960' x2='39.960' y2='639.960'
+   x1='39.960' y1='264.960' x2='39.960' y2='714.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <path
-   d='M 439.800 264.960 Q 392.820 264.960 345.840 264.960'
+   d='M 439.800 264.960 Q 392.220 300.660 344.639 336.359'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(cat (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
@@ -3118,64 +3205,67 @@
    <title>(cat (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
    <circle style='fill: red;' cx='439.800' cy='189.960' r='6.000'/></g>
   <path
-   d='M 339.840 339.960 Q 192.021 450.338 44.202 635.717'
+   d='M 339.840 414.960 Q 192.021 525.338 44.202 710.717'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(cat &quot;Success&quot; (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI-1)</title>
-   <circle cx='339.840' cy='339.960' r='6.000'/></g>
+   <circle cx='339.840' cy='414.960' r='6.000'/></g>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle style='fill: blue;' cx='339.840' cy='264.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='339.840' cy='339.960' r='6.000'/></g>
   <path
-   d='M 339.840 189.960 Q 292.860 189.960 245.880 189.960'
+   d='M 339.840 264.960 Q 292.860 264.960 245.880 264.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
+  <g>
+   <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
+   <circle cx='339.840' cy='264.960' r='6.000'/></g>
   <path
    d='M 339.840 189.960 Q 386.820 189.960 433.800 189.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
-   <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
-   <circle cx='339.840' cy='189.960' r='6.000'/></g>
+   <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) SUPI-1)</title>
+   <circle style='fill: gray;' cx='339.840' cy='189.960' r='6.000'/></g>
   <g><title>(enc SUPI-1 (pubk HN) SN)</title>
    <circle style='fill: blue;' cx='339.840' cy='114.960' r='6.000'/></g>
   <path
-   d='M 239.880 264.960 Q 192.900 264.960 145.920 264.960'
+   d='M 239.880 339.960 Q 192.900 339.960 145.920 339.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle cx='239.880' cy='264.960' r='6.000'/></g>
+   <circle cx='239.880' cy='339.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN)))</title>
-   <circle style='fill: blue;' cx='239.880' cy='189.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='239.880' cy='264.960' r='6.000'/></g>
   <g><title>(enc SUPI-0 (pubk HN))</title>
-   <circle cx='239.880' cy='114.960' r='6.000'/></g>
+   <circle cx='239.880' cy='189.960' r='6.000'/></g>
   <path
-   d='M 139.920 339.960 Q 92.940 339.960 45.960 339.960'
+   d='M 139.920 414.960 Q 92.940 414.960 45.960 414.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND)</title>
-   <circle cx='139.920' cy='339.960' r='6.000'/></g>
+   <circle cx='139.920' cy='414.960' r='6.000'/></g>
   <g>
    <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND)</title>
-   <circle style='fill: blue;' cx='139.920' cy='264.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='139.920' cy='339.960' r='6.000'/></g>
   <g>
    <title>(cat &quot;Success&quot; (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI)</title>
-   <circle style='fill: blue;' cx='39.960' cy='639.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='39.960' cy='714.960' r='6.000'/></g>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle cx='39.960' cy='564.960' r='6.000'/></g>
+   <circle cx='39.960' cy='639.960' r='6.000'/></g>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle style='fill: blue;' cx='39.960' cy='489.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='39.960' cy='564.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN)))</title>
-   <circle cx='39.960' cy='414.960' r='6.000'/></g>
+   <circle cx='39.960' cy='489.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
-   <circle style='fill: blue;' cx='39.960' cy='339.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='39.960' cy='414.960' r='6.000'/></g>
   <g><title>(enc SUPI (pubk HN) SN)</title>
-   <circle cx='39.960' cy='264.960' r='6.000'/></g>
+   <circle cx='39.960' cy='339.960' r='6.000'/></g>
   <g><title>(enc SUPI (pubk HN))</title>
-   <circle style='fill: blue;' cx='39.960' cy='189.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='39.960' cy='264.960' r='6.000'/></g>
   <g>
    <title>((SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE) (SN SN) (HN HN))</title>
    <text
@@ -3205,13 +3295,13 @@
         RAND (hash (ltk UE HN) RAND)) RAND))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 4 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 5 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
   (deflistener
     (cat (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND
       (hash (ltk UE HN) RAND)))
-  (precedes ((1 1) (0 2)) ((2 2) (1 0)) ((3 1) (2 1)) ((3 1) (4 0))
-    ((3 3) (0 6)) ((4 1) (3 2)))
+  (precedes ((1 1) (0 2)) ((2 2) (1 0)) ((3 1) (4 0)) ((3 2) (2 1))
+    ((3 4) (0 6)) ((4 1) (3 3)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
   (operation encryption-test
@@ -3219,7 +3309,7 @@
       (cat (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND
         (hash (ltk UE HN) RAND)))
     (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND
-      (hash (ltk UE HN) RAND)) (3 2))
+      (hash (ltk UE HN) RAND)) (3 3))
   (label 25)
   (parent 17)
   (unrealized (4 0))
@@ -3230,9 +3320,9 @@
 
 <div>
  <svg
-  class='diagram' width='579.720pt' height='679.920pt'
+  class='diagram' width='579.720pt' height='754.920pt'
   xmlns='http://www.w3.org/2000/svg' version='1.1'
-  viewBox='0 0 579.720 679.920' font-size='12.000'>
+  viewBox='0 0 579.720 754.920' font-size='12.000'>
   <defs>
    <marker
     id='arrow' orient='auto' markerWidth='5' markerHeight='10' refX='5'
@@ -3248,16 +3338,16 @@
    x1='439.800' y1='264.960' x2='439.800' y2='339.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='339.840' y1='114.960' x2='339.840' y2='264.960'
+   x1='339.840' y1='189.960' x2='339.840' y2='339.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='239.880' y1='264.960' x2='239.880' y2='339.960'
+   x1='239.880' y1='339.960' x2='239.880' y2='414.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='139.920' y1='114.960' x2='139.920' y2='189.960'
+   x1='139.920' y1='114.960' x2='139.920' y2='264.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='39.960' y1='189.960' x2='39.960' y2='639.960'
+   x1='39.960' y1='264.960' x2='39.960' y2='714.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <path
    d='M 539.760 264.960 Q 492.780 264.960 445.800 264.960'
@@ -3269,7 +3359,7 @@
    <title>(cat (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN (hash SQN (hash (ltk UE HN) RAND)))</title>
    <circle style='fill: red;' cx='539.760' cy='189.960' r='6.000'/></g>
   <path
-   d='M 439.800 339.960 Q 242.280 450.660 44.759 636.359'
+   d='M 439.800 339.960 Q 242.068 487.908 44.336 710.855'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN (hash SQN (hash (ltk UE HN) RAND))) SN)</title>
@@ -3278,55 +3368,58 @@
    <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN (hash SQN (hash (ltk UE HN) RAND))) SN)</title>
    <circle style='fill: blue;' cx='439.800' cy='264.960' r='6.000'/></g>
   <path
-   d='M 339.840 264.960 Q 292.860 264.960 245.880 264.960'
+   d='M 339.840 339.960 Q 292.860 339.960 245.880 339.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle cx='339.840' cy='264.960' r='6.000'/></g>
+   <circle cx='339.840' cy='339.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN)))</title>
-   <circle style='fill: blue;' cx='339.840' cy='189.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='339.840' cy='264.960' r='6.000'/></g>
   <g><title>(enc SUPI-1 (pubk HN))</title>
-   <circle cx='339.840' cy='114.960' r='6.000'/></g>
+   <circle cx='339.840' cy='189.960' r='6.000'/></g>
   <path
-   d='M 239.880 339.960 Q 142.920 302.460 45.960 339.960'
+   d='M 239.880 414.960 Q 142.920 377.460 45.960 414.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND)</title>
-   <circle cx='239.880' cy='339.960' r='6.000'/></g>
+   <circle cx='239.880' cy='414.960' r='6.000'/></g>
   <g>
    <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND)</title>
-   <circle style='fill: blue;' cx='239.880' cy='264.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='239.880' cy='339.960' r='6.000'/></g>
   <path
-   d='M 139.920 189.960 Q 236.880 152.460 333.840 189.960'
+   d='M 139.920 264.960 Q 236.880 227.460 333.840 264.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
+  <g>
+   <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN-0 RAND (hash (ltk UE HN) RAND)) RAND))</title>
+   <circle cx='139.920' cy='264.960' r='6.000'/></g>
   <path
    d='M 139.920 189.960 Q 336.840 152.460 533.760 189.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
-   <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN-0 RAND (hash (ltk UE HN) RAND)) RAND))</title>
-   <circle cx='139.920' cy='189.960' r='6.000'/></g>
+   <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN-0 RAND (hash (ltk UE HN) RAND)) SUPI-0)</title>
+   <circle style='fill: gray;' cx='139.920' cy='189.960' r='6.000'/></g>
   <g><title>(enc SUPI-0 (pubk HN) SN-0)</title>
    <circle style='fill: blue;' cx='139.920' cy='114.960' r='6.000'/></g>
   <g>
    <title>(cat &quot;Success&quot; (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI)</title>
-   <circle style='fill: blue;' cx='39.960' cy='639.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='39.960' cy='714.960' r='6.000'/></g>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle cx='39.960' cy='564.960' r='6.000'/></g>
+   <circle cx='39.960' cy='639.960' r='6.000'/></g>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle style='fill: blue;' cx='39.960' cy='489.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='39.960' cy='564.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN)))</title>
-   <circle cx='39.960' cy='414.960' r='6.000'/></g>
+   <circle cx='39.960' cy='489.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
-   <circle style='fill: blue;' cx='39.960' cy='339.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='39.960' cy='414.960' r='6.000'/></g>
   <g><title>(enc SUPI (pubk HN) SN)</title>
-   <circle cx='39.960' cy='264.960' r='6.000'/></g>
+   <circle cx='39.960' cy='339.960' r='6.000'/></g>
   <g><title>(enc SUPI (pubk HN))</title>
-   <circle style='fill: blue;' cx='39.960' cy='189.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='39.960' cy='264.960' r='6.000'/></g>
   <g>
    <title>((SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE) (SN SN) (HN HN))</title>
    <text
@@ -3350,7 +3443,7 @@
   (vars (SQN text) (SUPI RAND SUPI-0 SUPI-1 data) (SN UE HN SN-0 name))
   (defstrand ServingNetwork 7 (SQN SQN) (SUPI SUPI) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 2 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN-0) (HN HN))
   (deflistener
     (cat
@@ -3365,7 +3458,7 @@
   (deflistener
     (cat (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
       (hash SQN (hash (ltk UE HN) RAND))))
-  (precedes ((1 1) (3 1)) ((1 1) (5 0)) ((2 1) (0 2)) ((3 2) (2 0))
+  (precedes ((1 1) (5 0)) ((1 2) (3 1)) ((2 1) (0 2)) ((3 2) (2 0))
     ((4 1) (0 6)) ((5 1) (4 0)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
@@ -3397,62 +3490,65 @@
      style='stroke-width: 2; fill: none; stroke: black;'/></marker>
    </defs>
   <line
-   x1='339.840' y1='114.960' x2='339.840' y2='264.960'
+   x1='339.840' y1='189.960' x2='339.840' y2='339.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='239.880' y1='114.960' x2='239.880' y2='339.960'
+   x1='239.880' y1='114.960' x2='239.880' y2='414.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='139.920' y1='114.960' x2='139.920' y2='264.960'
+   x1='139.920' y1='189.960' x2='139.920' y2='339.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
    x1='39.960' y1='114.960' x2='39.960' y2='564.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <path
-   d='M 339.840 264.960 Q 292.860 264.960 245.880 264.960'
+   d='M 339.840 339.960 Q 292.860 339.960 245.880 339.960'
    style='stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle cx='339.840' cy='264.960' r='6.000'/></g>
+   <circle cx='339.840' cy='339.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN)))</title>
-   <circle style='fill: blue;' cx='339.840' cy='189.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='339.840' cy='264.960' r='6.000'/></g>
   <g><title>(enc SUPI-2 (pubk HN))</title>
-   <circle cx='339.840' cy='114.960' r='6.000'/></g>
+   <circle cx='339.840' cy='189.960' r='6.000'/></g>
   <path
-   d='M 239.880 339.960 Q 141.913 412.717 43.945 560.475'
+   d='M 239.880 414.960 Q 142.320 450.660 44.759 561.359'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(cat &quot;Success&quot; (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI-1)</title>
-   <circle cx='239.880' cy='339.960' r='6.000'/></g>
+   <circle cx='239.880' cy='414.960' r='6.000'/></g>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle style='fill: blue;' cx='239.880' cy='264.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='239.880' cy='339.960' r='6.000'/></g>
   <path
-   d='M 239.880 189.960 Q 142.729 188.906 45.578 262.852'
+   d='M 239.880 264.960 Q 142.920 227.460 45.960 264.960'
    style='stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <path
-   d='M 239.880 189.960 Q 192.900 189.960 145.920 189.960'
+   d='M 239.880 264.960 Q 192.900 264.960 145.920 264.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <path
-   d='M 239.880 189.960 Q 286.860 189.960 333.840 189.960'
+   d='M 239.880 264.960 Q 286.860 264.960 333.840 264.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
-   <circle cx='239.880' cy='189.960' r='6.000'/></g>
+   <circle cx='239.880' cy='264.960' r='6.000'/></g>
+  <g>
+   <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) SUPI-1)</title>
+   <circle style='fill: gray;' cx='239.880' cy='189.960' r='6.000'/></g>
   <g><title>(enc SUPI-1 (pubk HN) SN)</title>
    <circle style='fill: blue;' cx='239.880' cy='114.960' r='6.000'/></g>
   <path
-   d='M 139.920 264.960 Q 91.604 337.464 43.287 409.967'
+   d='M 139.920 339.960 Q 92.340 375.660 44.759 411.359'
    style='stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle cx='139.920' cy='264.960' r='6.000'/></g>
+   <circle cx='139.920' cy='339.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN)))</title>
-   <circle style='fill: blue;' cx='139.920' cy='189.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='139.920' cy='264.960' r='6.000'/></g>
   <g><title>(enc SUPI-0 (pubk HN))</title>
-   <circle cx='139.920' cy='114.960' r='6.000'/></g>
+   <circle cx='139.920' cy='189.960' r='6.000'/></g>
   <g>
    <title>(cat &quot;Success&quot; (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI)</title>
    <circle style='fill: blue;' cx='39.960' cy='564.960' r='6.000'/></g>
@@ -3503,15 +3599,15 @@
     (SN SN) (HN HN))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 4 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 5 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI-2) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (precedes ((1 2) (0 4)) ((2 1) (0 2)) ((2 1) (1 1)) ((2 1) (3 1))
-    ((2 3) (0 6)) ((3 2) (2 2)))
+  (precedes ((1 2) (0 4)) ((2 2) (0 2)) ((2 2) (1 1)) ((2 2) (3 1))
+    ((2 4) (0 6)) ((3 2) (2 3)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
-  (operation encryption-test (displaced 4 2 HomeNetwork 2)
+  (operation encryption-test (displaced 4 2 HomeNetwork 3)
     (hash SQN-0 (hash (ltk UE HN) RAND)) (3 1))
   (label 27)
   (parent 20)
@@ -3546,7 +3642,7 @@
    x1='239.880' y1='114.960' x2='239.880' y2='414.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='139.920' y1='114.960' x2='139.920' y2='264.960'
+   x1='139.920' y1='189.960' x2='139.920' y2='339.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
    x1='39.960' y1='114.960' x2='39.960' y2='564.960'
@@ -3579,30 +3675,33 @@
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
    <circle style='fill: blue;' cx='239.880' cy='339.960' r='6.000'/></g>
   <path
-   d='M 239.880 189.960 Q 142.729 188.906 45.578 262.852'
+   d='M 239.880 264.960 Q 142.920 227.460 45.960 264.960'
    style='stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <path
-   d='M 239.880 189.960 Q 192.900 189.960 145.920 189.960'
+   d='M 239.880 264.960 Q 192.900 264.960 145.920 264.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
+  <g>
+   <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
+   <circle cx='239.880' cy='264.960' r='6.000'/></g>
   <path
    d='M 239.880 189.960 Q 336.840 152.460 433.800 189.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
-   <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
-   <circle cx='239.880' cy='189.960' r='6.000'/></g>
+   <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) SUPI-1)</title>
+   <circle style='fill: gray;' cx='239.880' cy='189.960' r='6.000'/></g>
   <g><title>(enc SUPI-1 (pubk HN) SN)</title>
    <circle style='fill: blue;' cx='239.880' cy='114.960' r='6.000'/></g>
   <path
-   d='M 139.920 264.960 Q 91.604 337.464 43.287 409.967'
+   d='M 139.920 339.960 Q 92.340 375.660 44.759 411.359'
    style='stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle cx='139.920' cy='264.960' r='6.000'/></g>
+   <circle cx='139.920' cy='339.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN)))</title>
-   <circle style='fill: blue;' cx='139.920' cy='189.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='139.920' cy='264.960' r='6.000'/></g>
   <g><title>(enc SUPI-0 (pubk HN))</title>
-   <circle cx='139.920' cy='114.960' r='6.000'/></g>
+   <circle cx='139.920' cy='189.960' r='6.000'/></g>
   <g>
    <title>(cat &quot;Success&quot; (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI)</title>
    <circle style='fill: blue;' cx='39.960' cy='564.960' r='6.000'/></g>
@@ -3653,13 +3752,13 @@
     (SN SN) (HN HN))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 4 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 5 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
   (defstrand UserEquip 3 (SQN SQN-0) (SUPI SUPI-2) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
   (deflistener (cat SQN-0 (hash (ltk UE HN) RAND)))
-  (precedes ((1 2) (0 4)) ((2 1) (0 2)) ((2 1) (1 1)) ((2 1) (4 0))
-    ((2 3) (0 6)) ((3 2) (2 2)) ((4 1) (3 1)))
+  (precedes ((1 2) (0 4)) ((2 1) (4 0)) ((2 2) (0 2)) ((2 2) (1 1))
+    ((2 4) (0 6)) ((3 2) (2 3)) ((4 1) (3 1)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
   (operation encryption-test
@@ -3675,9 +3774,9 @@
 
 <div>
  <svg
-  class='diagram' width='279.840pt' height='604.920pt'
+  class='diagram' width='279.840pt' height='679.920pt'
   xmlns='http://www.w3.org/2000/svg' version='1.1'
-  viewBox='0 0 279.840 604.920' font-size='12.000'>
+  viewBox='0 0 279.840 679.920' font-size='12.000'>
   <defs>
    <marker
     id='arrow' orient='auto' markerWidth='5' markerHeight='10' refX='5'
@@ -3687,64 +3786,67 @@
      style='stroke-width: 2; fill: none; stroke: black;'/></marker>
    </defs>
   <line
-   x1='239.880' y1='114.960' x2='239.880' y2='339.960'
+   x1='239.880' y1='114.960' x2='239.880' y2='414.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='139.920' y1='114.960' x2='139.920' y2='264.960'
+   x1='139.920' y1='189.960' x2='139.920' y2='339.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='39.960' y1='114.960' x2='39.960' y2='564.960'
+   x1='39.960' y1='189.960' x2='39.960' y2='639.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <path
-   d='M 239.880 339.960 Q 141.913 412.717 43.945 560.475'
+   d='M 239.880 414.960 Q 141.913 487.717 43.945 635.475'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(cat &quot;Success&quot; (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI-1)</title>
-   <circle cx='239.880' cy='339.960' r='6.000'/></g>
+   <circle cx='239.880' cy='414.960' r='6.000'/></g>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle style='fill: blue;' cx='239.880' cy='264.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='239.880' cy='339.960' r='6.000'/></g>
   <path
-   d='M 239.880 189.960 Q 192.900 189.960 145.920 189.960'
+   d='M 239.880 264.960 Q 192.900 264.960 145.920 264.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
-   <circle cx='239.880' cy='189.960' r='6.000'/></g>
+   <circle cx='239.880' cy='264.960' r='6.000'/></g>
+  <g>
+   <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) SUPI-1)</title>
+   <circle style='fill: gray;' cx='239.880' cy='189.960' r='6.000'/></g>
   <g><title>(enc SUPI-1 (pubk HN) SN)</title>
    <circle style='fill: blue;' cx='239.880' cy='114.960' r='6.000'/></g>
   <path
-   d='M 139.920 264.960 Q 92.940 264.960 45.960 264.960'
+   d='M 139.920 339.960 Q 92.940 339.960 45.960 339.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <path
-   d='M 139.920 264.960 Q 186.900 264.960 233.880 264.960'
+   d='M 139.920 339.960 Q 186.900 339.960 233.880 339.960'
    style='stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle cx='139.920' cy='264.960' r='6.000'/></g>
+   <circle cx='139.920' cy='339.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN)))</title>
-   <circle style='fill: blue;' cx='139.920' cy='189.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='139.920' cy='264.960' r='6.000'/></g>
   <g><title>(enc SUPI-0 (pubk HN))</title>
-   <circle cx='139.920' cy='114.960' r='6.000'/></g>
+   <circle cx='139.920' cy='189.960' r='6.000'/></g>
   <g>
    <title>(cat &quot;Success&quot; (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI)</title>
-   <circle style='fill: blue;' cx='39.960' cy='564.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='39.960' cy='639.960' r='6.000'/></g>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle cx='39.960' cy='489.960' r='6.000'/></g>
+   <circle cx='39.960' cy='564.960' r='6.000'/></g>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle style='fill: blue;' cx='39.960' cy='414.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='39.960' cy='489.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN)))</title>
-   <circle cx='39.960' cy='339.960' r='6.000'/></g>
+   <circle cx='39.960' cy='414.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
-   <circle style='fill: blue;' cx='39.960' cy='264.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='39.960' cy='339.960' r='6.000'/></g>
   <g><title>(enc SUPI (pubk HN) SN)</title>
-   <circle cx='39.960' cy='189.960' r='6.000'/></g>
+   <circle cx='39.960' cy='264.960' r='6.000'/></g>
   <g><title>(enc SUPI (pubk HN))</title>
-   <circle style='fill: blue;' cx='39.960' cy='114.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='39.960' cy='189.960' r='6.000'/></g>
   <g>
    <title>((SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE) (SN SN) (HN HN))</title>
    <text
@@ -3770,9 +3872,9 @@
     (SN SN) (HN HN))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 4 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 5 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (precedes ((1 2) (0 2)) ((1 2) (2 2)) ((2 1) (1 1)) ((2 3) (0 6)))
+  (precedes ((1 2) (0 2)) ((1 2) (2 3)) ((2 2) (1 1)) ((2 4) (0 6)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
   (operation generalization deleted (1 0))
@@ -3785,9 +3887,9 @@
 
 <div>
  <svg
-  class='diagram' width='479.760pt' height='679.920pt'
+  class='diagram' width='479.760pt' height='754.920pt'
   xmlns='http://www.w3.org/2000/svg' version='1.1'
-  viewBox='0 0 479.760 679.920' font-size='12.000'>
+  viewBox='0 0 479.760 754.920' font-size='12.000'>
   <defs>
    <marker
     id='arrow' orient='auto' markerWidth='5' markerHeight='10' refX='5'
@@ -3797,90 +3899,93 @@
      style='stroke-width: 2; fill: none; stroke: black;'/></marker>
    </defs>
   <line
-   x1='439.800' y1='114.960' x2='439.800' y2='264.960'
+   x1='439.800' y1='189.960' x2='439.800' y2='339.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='339.840' y1='114.960' x2='339.840' y2='339.960'
+   x1='339.840' y1='114.960' x2='339.840' y2='414.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='239.880' y1='114.960' x2='239.880' y2='264.960'
+   x1='239.880' y1='189.960' x2='239.880' y2='339.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='139.920' y1='264.960' x2='139.920' y2='339.960'
+   x1='139.920' y1='339.960' x2='139.920' y2='414.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='39.960' y1='189.960' x2='39.960' y2='639.960'
+   x1='39.960' y1='264.960' x2='39.960' y2='714.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <path
-   d='M 439.800 264.960 Q 392.820 264.960 345.840 264.960'
+   d='M 439.800 339.960 Q 392.820 339.960 345.840 339.960'
    style='stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle cx='439.800' cy='264.960' r='6.000'/></g>
+   <circle cx='439.800' cy='339.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN)))</title>
-   <circle style='fill: blue;' cx='439.800' cy='189.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='439.800' cy='264.960' r='6.000'/></g>
   <g><title>(enc SUPI-2 (pubk HN))</title>
-   <circle cx='439.800' cy='114.960' r='6.000'/></g>
+   <circle cx='439.800' cy='189.960' r='6.000'/></g>
   <path
-   d='M 339.840 339.960 Q 192.021 450.338 44.202 635.717'
+   d='M 339.840 414.960 Q 192.021 525.338 44.202 710.717'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(cat &quot;Success&quot; (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI-1)</title>
-   <circle cx='339.840' cy='339.960' r='6.000'/></g>
+   <circle cx='339.840' cy='414.960' r='6.000'/></g>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle style='fill: blue;' cx='339.840' cy='264.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='339.840' cy='339.960' r='6.000'/></g>
   <path
-   d='M 339.840 189.960 Q 292.860 189.960 245.880 189.960'
+   d='M 339.840 264.960 Q 292.860 264.960 245.880 264.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <path
-   d='M 339.840 189.960 Q 386.820 189.960 433.800 189.960'
+   d='M 339.840 264.960 Q 386.820 264.960 433.800 264.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
-   <circle cx='339.840' cy='189.960' r='6.000'/></g>
+   <circle cx='339.840' cy='264.960' r='6.000'/></g>
+  <g>
+   <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) SUPI-1)</title>
+   <circle style='fill: gray;' cx='339.840' cy='189.960' r='6.000'/></g>
   <g><title>(enc SUPI-1 (pubk HN) SN)</title>
    <circle style='fill: blue;' cx='339.840' cy='114.960' r='6.000'/></g>
   <path
-   d='M 239.880 264.960 Q 192.900 264.960 145.920 264.960'
+   d='M 239.880 339.960 Q 192.900 339.960 145.920 339.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle cx='239.880' cy='264.960' r='6.000'/></g>
+   <circle cx='239.880' cy='339.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN)))</title>
-   <circle style='fill: blue;' cx='239.880' cy='189.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='239.880' cy='264.960' r='6.000'/></g>
   <g><title>(enc SUPI-0 (pubk HN))</title>
-   <circle cx='239.880' cy='114.960' r='6.000'/></g>
+   <circle cx='239.880' cy='189.960' r='6.000'/></g>
   <path
-   d='M 139.920 339.960 Q 92.940 339.960 45.960 339.960'
+   d='M 139.920 414.960 Q 92.940 414.960 45.960 414.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND)</title>
-   <circle cx='139.920' cy='339.960' r='6.000'/></g>
+   <circle cx='139.920' cy='414.960' r='6.000'/></g>
   <g>
    <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND)</title>
-   <circle style='fill: blue;' cx='139.920' cy='264.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='139.920' cy='339.960' r='6.000'/></g>
   <g>
    <title>(cat &quot;Success&quot; (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI)</title>
-   <circle style='fill: blue;' cx='39.960' cy='639.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='39.960' cy='714.960' r='6.000'/></g>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle cx='39.960' cy='564.960' r='6.000'/></g>
+   <circle cx='39.960' cy='639.960' r='6.000'/></g>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle style='fill: blue;' cx='39.960' cy='489.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='39.960' cy='564.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN)))</title>
-   <circle cx='39.960' cy='414.960' r='6.000'/></g>
+   <circle cx='39.960' cy='489.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
-   <circle style='fill: blue;' cx='39.960' cy='339.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='39.960' cy='414.960' r='6.000'/></g>
   <g><title>(enc SUPI (pubk HN) SN)</title>
-   <circle cx='39.960' cy='264.960' r='6.000'/></g>
+   <circle cx='39.960' cy='339.960' r='6.000'/></g>
   <g><title>(enc SUPI (pubk HN))</title>
-   <circle style='fill: blue;' cx='39.960' cy='189.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='39.960' cy='264.960' r='6.000'/></g>
   <g>
    <title>((SQN SQN) (SUPI SUPI-2) (RAND RAND) (UE UE) (SN SN) (HN HN))</title>
    <text
@@ -3916,15 +4021,15 @@
         RAND (hash (ltk UE HN) RAND)) RAND))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 4 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 5 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI-2) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (precedes ((1 1) (0 2)) ((2 2) (1 0)) ((3 1) (2 1)) ((3 1) (4 1))
-    ((3 3) (0 6)) ((4 2) (3 2)))
+  (precedes ((1 1) (0 2)) ((2 2) (1 0)) ((3 2) (2 1)) ((3 2) (4 1))
+    ((3 4) (0 6)) ((4 2) (3 3)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
-  (operation encryption-test (displaced 5 3 HomeNetwork 2)
+  (operation encryption-test (displaced 5 3 HomeNetwork 3)
     (hash SQN-0 (hash (ltk UE HN) RAND)) (4 1))
   (label 30)
   (parent 24)
@@ -3935,9 +4040,9 @@
 
 <div>
  <svg
-  class='diagram' width='579.720pt' height='679.920pt'
+  class='diagram' width='579.720pt' height='754.920pt'
   xmlns='http://www.w3.org/2000/svg' version='1.1'
-  viewBox='0 0 579.720 679.920' font-size='12.000'>
+  viewBox='0 0 579.720 754.920' font-size='12.000'>
   <defs>
    <marker
     id='arrow' orient='auto' markerWidth='5' markerHeight='10' refX='5'
@@ -3956,13 +4061,13 @@
    x1='339.840' y1='114.960' x2='339.840' y2='414.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='239.880' y1='114.960' x2='239.880' y2='264.960'
+   x1='239.880' y1='189.960' x2='239.880' y2='339.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='139.920' y1='264.960' x2='139.920' y2='339.960'
+   x1='139.920' y1='339.960' x2='139.920' y2='414.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='39.960' y1='189.960' x2='39.960' y2='639.960'
+   x1='39.960' y1='264.960' x2='39.960' y2='714.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <path
    d='M 539.760 264.960 Q 492.780 264.960 445.800 264.960'
@@ -3983,7 +4088,7 @@
   <g><title>(enc SUPI-2 (pubk HN))</title>
    <circle cx='439.800' cy='189.960' r='6.000'/></g>
   <path
-   d='M 339.840 414.960 Q 192.300 488.160 44.759 636.359'
+   d='M 339.840 414.960 Q 192.021 525.338 44.202 710.717'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(cat &quot;Success&quot; (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI-1)</title>
@@ -3992,55 +4097,58 @@
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
    <circle style='fill: blue;' cx='339.840' cy='339.960' r='6.000'/></g>
   <path
-   d='M 339.840 189.960 Q 292.860 189.960 245.880 189.960'
+   d='M 339.840 264.960 Q 292.860 264.960 245.880 264.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
+  <g>
+   <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
+   <circle cx='339.840' cy='264.960' r='6.000'/></g>
   <path
    d='M 339.840 189.960 Q 436.800 152.460 533.760 189.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
-   <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
-   <circle cx='339.840' cy='189.960' r='6.000'/></g>
+   <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) SUPI-1)</title>
+   <circle style='fill: gray;' cx='339.840' cy='189.960' r='6.000'/></g>
   <g><title>(enc SUPI-1 (pubk HN) SN)</title>
    <circle style='fill: blue;' cx='339.840' cy='114.960' r='6.000'/></g>
   <path
-   d='M 239.880 264.960 Q 192.900 264.960 145.920 264.960'
+   d='M 239.880 339.960 Q 192.900 339.960 145.920 339.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle cx='239.880' cy='264.960' r='6.000'/></g>
+   <circle cx='239.880' cy='339.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN)))</title>
-   <circle style='fill: blue;' cx='239.880' cy='189.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='239.880' cy='264.960' r='6.000'/></g>
   <g><title>(enc SUPI-0 (pubk HN))</title>
-   <circle cx='239.880' cy='114.960' r='6.000'/></g>
+   <circle cx='239.880' cy='189.960' r='6.000'/></g>
   <path
-   d='M 139.920 339.960 Q 92.940 339.960 45.960 339.960'
+   d='M 139.920 414.960 Q 92.940 414.960 45.960 414.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND)</title>
-   <circle cx='139.920' cy='339.960' r='6.000'/></g>
+   <circle cx='139.920' cy='414.960' r='6.000'/></g>
   <g>
    <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND)</title>
-   <circle style='fill: blue;' cx='139.920' cy='264.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='139.920' cy='339.960' r='6.000'/></g>
   <g>
    <title>(cat &quot;Success&quot; (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI)</title>
-   <circle style='fill: blue;' cx='39.960' cy='639.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='39.960' cy='714.960' r='6.000'/></g>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle cx='39.960' cy='564.960' r='6.000'/></g>
+   <circle cx='39.960' cy='639.960' r='6.000'/></g>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle style='fill: blue;' cx='39.960' cy='489.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='39.960' cy='564.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN)))</title>
-   <circle cx='39.960' cy='414.960' r='6.000'/></g>
+   <circle cx='39.960' cy='489.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
-   <circle style='fill: blue;' cx='39.960' cy='339.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='39.960' cy='414.960' r='6.000'/></g>
   <g><title>(enc SUPI (pubk HN) SN)</title>
-   <circle cx='39.960' cy='264.960' r='6.000'/></g>
+   <circle cx='39.960' cy='339.960' r='6.000'/></g>
   <g><title>(enc SUPI (pubk HN))</title>
-   <circle style='fill: blue;' cx='39.960' cy='189.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='39.960' cy='264.960' r='6.000'/></g>
   <g>
    <title>((SQN SQN-0) (SUPI SUPI-2) (RAND RAND) (UE UE) (SN SN) (HN HN))</title>
    <text
@@ -4076,13 +4184,13 @@
         RAND (hash (ltk UE HN) RAND)) RAND))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 4 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 5 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
   (defstrand UserEquip 3 (SQN SQN-0) (SUPI SUPI-2) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
   (deflistener (cat SQN-0 (hash (ltk UE HN) RAND)))
-  (precedes ((1 1) (0 2)) ((2 2) (1 0)) ((3 1) (2 1)) ((3 1) (5 0))
-    ((3 3) (0 6)) ((4 2) (3 2)) ((5 1) (4 1)))
+  (precedes ((1 1) (0 2)) ((2 2) (1 0)) ((3 1) (5 0)) ((3 2) (2 1))
+    ((3 4) (0 6)) ((4 2) (3 3)) ((5 1) (4 1)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
   (operation encryption-test
@@ -4110,51 +4218,54 @@
      style='stroke-width: 2; fill: none; stroke: black;'/></marker>
    </defs>
   <line
-   x1='239.880' y1='114.960' x2='239.880' y2='339.960'
+   x1='239.880' y1='114.960' x2='239.880' y2='414.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='139.920' y1='114.960' x2='139.920' y2='264.960'
+   x1='139.920' y1='189.960' x2='139.920' y2='339.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
    x1='39.960' y1='114.960' x2='39.960' y2='564.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <path
-   d='M 239.880 339.960 Q 141.913 412.717 43.945 560.475'
+   d='M 239.880 414.960 Q 142.320 450.660 44.759 561.359'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(cat &quot;Success&quot; (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI-1)</title>
-   <circle cx='239.880' cy='339.960' r='6.000'/></g>
+   <circle cx='239.880' cy='414.960' r='6.000'/></g>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle style='fill: blue;' cx='239.880' cy='264.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='239.880' cy='339.960' r='6.000'/></g>
   <path
-   d='M 239.880 189.960 Q 142.729 188.906 45.578 262.852'
+   d='M 239.880 264.960 Q 142.920 227.460 45.960 264.960'
    style='stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <path
-   d='M 239.880 189.960 Q 192.900 189.960 145.920 189.960'
+   d='M 239.880 264.960 Q 192.900 264.960 145.920 264.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
-   <circle cx='239.880' cy='189.960' r='6.000'/></g>
+   <circle cx='239.880' cy='264.960' r='6.000'/></g>
+  <g>
+   <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) SUPI-1)</title>
+   <circle style='fill: gray;' cx='239.880' cy='189.960' r='6.000'/></g>
   <g><title>(enc SUPI-1 (pubk HN) SN)</title>
    <circle style='fill: blue;' cx='239.880' cy='114.960' r='6.000'/></g>
   <path
-   d='M 139.920 264.960 Q 91.604 337.464 43.287 409.967'
+   d='M 139.920 339.960 Q 92.340 375.660 44.759 411.359'
    style='stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <path
-   d='M 139.920 264.960 Q 186.900 264.960 233.880 264.960'
+   d='M 139.920 339.960 Q 186.900 339.960 233.880 339.960'
    style='stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle cx='139.920' cy='264.960' r='6.000'/></g>
+   <circle cx='139.920' cy='339.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN)))</title>
-   <circle style='fill: blue;' cx='139.920' cy='189.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='139.920' cy='264.960' r='6.000'/></g>
   <path
-   d='M 139.920 114.960 Q 91.604 187.464 43.287 259.967'
+   d='M 139.920 189.960 Q 92.340 225.660 44.759 261.359'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g><title>(enc SUPI-0 (pubk HN))</title>
-   <circle cx='139.920' cy='114.960' r='6.000'/></g>
+   <circle cx='139.920' cy='189.960' r='6.000'/></g>
   <g>
    <title>(cat &quot;Success&quot; (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI)</title>
    <circle style='fill: blue;' cx='39.960' cy='564.960' r='6.000'/></g>
@@ -4199,10 +4310,10 @@
     (SN SN) (HN HN))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 4 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 5 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (precedes ((1 0) (0 2)) ((1 2) (0 4)) ((1 2) (2 2)) ((2 1) (0 2))
-    ((2 1) (1 1)) ((2 3) (0 6)))
+  (precedes ((1 0) (0 2)) ((1 2) (0 4)) ((1 2) (2 3)) ((2 2) (0 2))
+    ((2 2) (1 1)) ((2 4) (0 6)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
   (operation generalization weakened ((1 2) (0 2)))
@@ -4216,9 +4327,9 @@
 
 <div>
  <svg
-  class='diagram' width='379.800pt' height='604.920pt'
+  class='diagram' width='379.800pt' height='679.920pt'
   xmlns='http://www.w3.org/2000/svg' version='1.1'
-  viewBox='0 0 379.800 604.920' font-size='12.000'>
+  viewBox='0 0 379.800 679.920' font-size='12.000'>
   <defs>
    <marker
     id='arrow' orient='auto' markerWidth='5' markerHeight='10' refX='5'
@@ -4228,78 +4339,81 @@
      style='stroke-width: 2; fill: none; stroke: black;'/></marker>
    </defs>
   <line
-   x1='339.840' y1='114.960' x2='339.840' y2='264.960'
+   x1='339.840' y1='189.960' x2='339.840' y2='339.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='239.880' y1='114.960' x2='239.880' y2='339.960'
+   x1='239.880' y1='114.960' x2='239.880' y2='414.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='139.920' y1='114.960' x2='139.920' y2='264.960'
+   x1='139.920' y1='189.960' x2='139.920' y2='339.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='39.960' y1='114.960' x2='39.960' y2='564.960'
+   x1='39.960' y1='189.960' x2='39.960' y2='639.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <path
-   d='M 339.840 264.960 Q 292.860 264.960 245.880 264.960'
+   d='M 339.840 339.960 Q 292.860 339.960 245.880 339.960'
    style='stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle cx='339.840' cy='264.960' r='6.000'/></g>
+   <circle cx='339.840' cy='339.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN)))</title>
-   <circle style='fill: blue;' cx='339.840' cy='189.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='339.840' cy='264.960' r='6.000'/></g>
   <g><title>(enc SUPI-2 (pubk HN))</title>
-   <circle cx='339.840' cy='114.960' r='6.000'/></g>
+   <circle cx='339.840' cy='189.960' r='6.000'/></g>
   <path
-   d='M 239.880 339.960 Q 141.913 412.717 43.945 560.475'
+   d='M 239.880 414.960 Q 141.913 487.717 43.945 635.475'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(cat &quot;Success&quot; (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI-1)</title>
-   <circle cx='239.880' cy='339.960' r='6.000'/></g>
+   <circle cx='239.880' cy='414.960' r='6.000'/></g>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle style='fill: blue;' cx='239.880' cy='264.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='239.880' cy='339.960' r='6.000'/></g>
   <path
-   d='M 239.880 189.960 Q 192.900 189.960 145.920 189.960'
+   d='M 239.880 264.960 Q 192.900 264.960 145.920 264.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <path
-   d='M 239.880 189.960 Q 286.860 189.960 333.840 189.960'
+   d='M 239.880 264.960 Q 286.860 264.960 333.840 264.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
-   <circle cx='239.880' cy='189.960' r='6.000'/></g>
+   <circle cx='239.880' cy='264.960' r='6.000'/></g>
+  <g>
+   <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) SUPI-1)</title>
+   <circle style='fill: gray;' cx='239.880' cy='189.960' r='6.000'/></g>
   <g><title>(enc SUPI-1 (pubk HN) SN)</title>
    <circle style='fill: blue;' cx='239.880' cy='114.960' r='6.000'/></g>
   <path
-   d='M 139.920 264.960 Q 92.940 264.960 45.960 264.960'
+   d='M 139.920 339.960 Q 92.940 339.960 45.960 339.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle cx='139.920' cy='264.960' r='6.000'/></g>
+   <circle cx='139.920' cy='339.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN)))</title>
-   <circle style='fill: blue;' cx='139.920' cy='189.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='139.920' cy='264.960' r='6.000'/></g>
   <g><title>(enc SUPI-0 (pubk HN))</title>
-   <circle cx='139.920' cy='114.960' r='6.000'/></g>
+   <circle cx='139.920' cy='189.960' r='6.000'/></g>
   <g>
    <title>(cat &quot;Success&quot; (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI)</title>
-   <circle style='fill: blue;' cx='39.960' cy='564.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='39.960' cy='639.960' r='6.000'/></g>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle cx='39.960' cy='489.960' r='6.000'/></g>
+   <circle cx='39.960' cy='564.960' r='6.000'/></g>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle style='fill: blue;' cx='39.960' cy='414.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='39.960' cy='489.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN)))</title>
-   <circle cx='39.960' cy='339.960' r='6.000'/></g>
+   <circle cx='39.960' cy='414.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
-   <circle style='fill: blue;' cx='39.960' cy='264.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='39.960' cy='339.960' r='6.000'/></g>
   <g><title>(enc SUPI (pubk HN) SN)</title>
-   <circle cx='39.960' cy='189.960' r='6.000'/></g>
+   <circle cx='39.960' cy='264.960' r='6.000'/></g>
   <g><title>(enc SUPI (pubk HN))</title>
-   <circle style='fill: blue;' cx='39.960' cy='114.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='39.960' cy='189.960' r='6.000'/></g>
   <g>
    <title>((SQN SQN) (SUPI SUPI-2) (RAND RAND) (UE UE) (SN SN) (HN HN))</title>
    <text
@@ -4331,12 +4445,12 @@
     (SN SN) (HN HN))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 4 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 5 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI-2) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (precedes ((1 2) (0 2)) ((2 1) (1 1)) ((2 1) (3 1)) ((2 3) (0 6))
-    ((3 2) (2 2)))
+  (precedes ((1 2) (0 2)) ((2 2) (1 1)) ((2 2) (3 1)) ((2 4) (0 6))
+    ((3 2) (2 3)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
   (operation generalization deleted (1 0))
@@ -4361,65 +4475,68 @@
      style='stroke-width: 2; fill: none; stroke: black;'/></marker>
    </defs>
   <line
-   x1='339.840' y1='114.960' x2='339.840' y2='264.960'
+   x1='339.840' y1='189.960' x2='339.840' y2='339.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='239.880' y1='114.960' x2='239.880' y2='339.960'
+   x1='239.880' y1='114.960' x2='239.880' y2='414.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='139.920' y1='114.960' x2='139.920' y2='264.960'
+   x1='139.920' y1='189.960' x2='139.920' y2='339.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
    x1='39.960' y1='114.960' x2='39.960' y2='564.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <path
-   d='M 339.840 264.960 Q 292.860 264.960 245.880 264.960'
+   d='M 339.840 339.960 Q 292.860 339.960 245.880 339.960'
    style='stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle cx='339.840' cy='264.960' r='6.000'/></g>
+   <circle cx='339.840' cy='339.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN)))</title>
-   <circle style='fill: blue;' cx='339.840' cy='189.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='339.840' cy='264.960' r='6.000'/></g>
   <g><title>(enc SUPI-2 (pubk HN))</title>
-   <circle cx='339.840' cy='114.960' r='6.000'/></g>
+   <circle cx='339.840' cy='189.960' r='6.000'/></g>
   <path
-   d='M 239.880 339.960 Q 141.913 412.717 43.945 560.475'
+   d='M 239.880 414.960 Q 142.320 450.660 44.759 561.359'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(cat &quot;Success&quot; (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI-1)</title>
-   <circle cx='239.880' cy='339.960' r='6.000'/></g>
+   <circle cx='239.880' cy='414.960' r='6.000'/></g>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle style='fill: blue;' cx='239.880' cy='264.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='239.880' cy='339.960' r='6.000'/></g>
   <path
-   d='M 239.880 189.960 Q 142.729 188.906 45.578 262.852'
+   d='M 239.880 264.960 Q 142.920 227.460 45.960 264.960'
    style='stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <path
-   d='M 239.880 189.960 Q 192.900 189.960 145.920 189.960'
+   d='M 239.880 264.960 Q 192.900 264.960 145.920 264.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <path
-   d='M 239.880 189.960 Q 286.860 189.960 333.840 189.960'
+   d='M 239.880 264.960 Q 286.860 264.960 333.840 264.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
-   <circle cx='239.880' cy='189.960' r='6.000'/></g>
+   <circle cx='239.880' cy='264.960' r='6.000'/></g>
+  <g>
+   <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) SUPI-1)</title>
+   <circle style='fill: gray;' cx='239.880' cy='189.960' r='6.000'/></g>
   <g><title>(enc SUPI-1 (pubk HN) SN)</title>
    <circle style='fill: blue;' cx='239.880' cy='114.960' r='6.000'/></g>
   <path
-   d='M 139.920 264.960 Q 91.604 337.464 43.287 409.967'
+   d='M 139.920 339.960 Q 92.340 375.660 44.759 411.359'
    style='stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle cx='139.920' cy='264.960' r='6.000'/></g>
+   <circle cx='139.920' cy='339.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN)))</title>
-   <circle style='fill: blue;' cx='139.920' cy='189.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='139.920' cy='264.960' r='6.000'/></g>
   <path
-   d='M 139.920 114.960 Q 91.604 187.464 43.287 259.967'
+   d='M 139.920 189.960 Q 92.340 225.660 44.759 261.359'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g><title>(enc SUPI-0 (pubk HN))</title>
-   <circle cx='139.920' cy='114.960' r='6.000'/></g>
+   <circle cx='139.920' cy='189.960' r='6.000'/></g>
   <g>
    <title>(cat &quot;Success&quot; (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI)</title>
    <circle style='fill: blue;' cx='39.960' cy='564.960' r='6.000'/></g>
@@ -4470,12 +4587,12 @@
     (SN SN) (HN HN))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (defstrand HomeNetwork 4 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
+  (defstrand HomeNetwork 5 (SQN SQN) (SUPI SUPI-1) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI-2) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (precedes ((1 0) (0 2)) ((1 2) (0 4)) ((2 1) (0 2)) ((2 1) (1 1))
-    ((2 1) (3 1)) ((2 3) (0 6)) ((3 2) (2 2)))
+  (precedes ((1 0) (0 2)) ((1 2) (0 4)) ((2 2) (0 2)) ((2 2) (1 1))
+    ((2 2) (3 1)) ((2 4) (0 6)) ((3 2) (2 3)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
   (operation generalization weakened ((1 2) (0 2)))
@@ -4561,6 +4678,10 @@
   (defrole HomeNetwork
     (vars (SUPI RAND data) (UE SN HN name) (SQN text))
     (trace (recv (enc SUPI (pubk HN) SN))
+      (init
+        (cat
+          (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN
+            RAND (hash (ltk UE HN) RAND)) SUPI))
       (send
         (cat RAND
           (cat (hash SQN (hash (ltk UE HN) RAND))
@@ -4598,14 +4719,14 @@
    x1='39.960' y1='114.960' x2='39.960' y2='339.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <g>
-   <title>(cat &quot;Success&quot; (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI)</title>
-   <circle cx='39.960' cy='339.960' r='6.000'/></g>
-  <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle style='fill: red;' cx='39.960' cy='264.960' r='6.000'/></g>
+   <circle style='fill: red;' cx='39.960' cy='339.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
-   <circle cx='39.960' cy='189.960' r='6.000'/></g>
+   <circle cx='39.960' cy='264.960' r='6.000'/></g>
+  <g>
+   <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) SUPI)</title>
+   <circle style='fill: gray;' cx='39.960' cy='189.960' r='6.000'/></g>
   <g><title>(enc SUPI (pubk HN) SN)</title>
    <circle style='fill: blue;' cx='39.960' cy='114.960' r='6.000'/></g>
   <g>
@@ -4624,7 +4745,7 @@
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
   (label 35)
-  (unrealized (0 2))
+  (unrealized (0 3))
   (origs)
   (comment &quot;2 in cohort - 2 not yet seen&quot;))</pre>
 
@@ -4650,7 +4771,7 @@
    x1='39.960' y1='114.960' x2='39.960' y2='339.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <path
-   d='M 139.920 264.960 Q 92.940 264.960 45.960 264.960'
+   d='M 139.920 264.960 Q 92.340 300.660 44.759 336.359'
    style='stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
@@ -4661,17 +4782,17 @@
   <g><title>(enc SUPI-0 (pubk HN))</title>
    <circle cx='139.920' cy='114.960' r='6.000'/></g>
   <g>
-   <title>(cat &quot;Success&quot; (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI)</title>
-   <circle cx='39.960' cy='339.960' r='6.000'/></g>
-  <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle style='fill: blue;' cx='39.960' cy='264.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='39.960' cy='339.960' r='6.000'/></g>
+  <g>
+   <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
+   <circle cx='39.960' cy='264.960' r='6.000'/></g>
   <path
    d='M 39.960 189.960 Q 86.940 189.960 133.920 189.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
-   <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
-   <circle cx='39.960' cy='189.960' r='6.000'/></g>
+   <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) SUPI)</title>
+   <circle style='fill: gray;' cx='39.960' cy='189.960' r='6.000'/></g>
   <g><title>(enc SUPI (pubk HN) SN)</title>
    <circle style='fill: blue;' cx='39.960' cy='114.960' r='6.000'/></g>
   <g>
@@ -4694,12 +4815,12 @@
     (SN SN) (HN HN))
   (defstrand UserEquip 3 (SQN SQN-0) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (precedes ((0 1) (1 1)) ((1 2) (0 2)))
+  (precedes ((0 1) (1 1)) ((1 2) (0 3)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
   (operation encryption-test (added-strand UserEquip 3)
     (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND
-      (hash (ltk UE HN) RAND)) (0 2))
+      (hash (ltk UE HN) RAND)) (0 3))
   (label 36)
   (parent 35)
   (unrealized (1 1))
@@ -4727,7 +4848,7 @@
    x1='39.960' y1='114.960' x2='39.960' y2='339.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <path
-   d='M 139.920 264.960 Q 92.940 264.960 45.960 264.960'
+   d='M 139.920 264.960 Q 92.340 300.660 44.759 336.359'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(cat (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
@@ -4736,17 +4857,17 @@
    <title>(cat (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
    <circle style='fill: red;' cx='139.920' cy='189.960' r='6.000'/></g>
   <g>
-   <title>(cat &quot;Success&quot; (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI)</title>
-   <circle cx='39.960' cy='339.960' r='6.000'/></g>
-  <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle style='fill: blue;' cx='39.960' cy='264.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='39.960' cy='339.960' r='6.000'/></g>
+  <g>
+   <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
+   <circle cx='39.960' cy='264.960' r='6.000'/></g>
   <path
    d='M 39.960 189.960 Q 86.940 189.960 133.920 189.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
-   <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
-   <circle cx='39.960' cy='189.960' r='6.000'/></g>
+   <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) SUPI)</title>
+   <circle style='fill: gray;' cx='39.960' cy='189.960' r='6.000'/></g>
   <g><title>(enc SUPI (pubk HN) SN)</title>
    <circle style='fill: blue;' cx='39.960' cy='114.960' r='6.000'/></g>
   <g>
@@ -4765,7 +4886,7 @@
   (deflistener
     (cat (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND
       (hash (ltk UE HN) RAND)))
-  (precedes ((0 1) (1 0)) ((1 1) (0 2)))
+  (precedes ((0 1) (1 0)) ((1 1) (0 3)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
   (operation encryption-test
@@ -4773,7 +4894,7 @@
       (cat (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND
         (hash (ltk UE HN) RAND)))
     (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND
-      (hash (ltk UE HN) RAND)) (0 2))
+      (hash (ltk UE HN) RAND)) (0 3))
   (label 37)
   (parent 35)
   (unrealized (1 0))
@@ -4796,34 +4917,34 @@
      style='stroke-width: 2; fill: none; stroke: black;'/></marker>
    </defs>
   <line
-   x1='139.920' y1='114.960' x2='139.920' y2='264.960'
+   x1='139.920' y1='189.960' x2='139.920' y2='339.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
    x1='39.960' y1='114.960' x2='39.960' y2='339.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <path
-   d='M 139.920 264.960 Q 92.940 264.960 45.960 264.960'
+   d='M 139.920 339.960 Q 92.940 339.960 45.960 339.960'
    style='stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle cx='139.920' cy='264.960' r='6.000'/></g>
+   <circle cx='139.920' cy='339.960' r='6.000'/></g>
   <g>
    <title>(cat RAND (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN)))</title>
-   <circle style='fill: blue;' cx='139.920' cy='189.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='139.920' cy='264.960' r='6.000'/></g>
   <g><title>(enc SUPI-0 (pubk HN))</title>
-   <circle cx='139.920' cy='114.960' r='6.000'/></g>
-  <g>
-   <title>(cat &quot;Success&quot; (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI)</title>
-   <circle cx='39.960' cy='339.960' r='6.000'/></g>
+   <circle cx='139.920' cy='189.960' r='6.000'/></g>
   <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
-   <circle style='fill: blue;' cx='39.960' cy='264.960' r='6.000'/></g>
+   <circle style='fill: blue;' cx='39.960' cy='339.960' r='6.000'/></g>
   <path
-   d='M 39.960 189.960 Q 86.940 189.960 133.920 189.960'
+   d='M 39.960 264.960 Q 86.940 264.960 133.920 264.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
    <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
-   <circle cx='39.960' cy='189.960' r='6.000'/></g>
+   <circle cx='39.960' cy='264.960' r='6.000'/></g>
+  <g>
+   <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) SUPI)</title>
+   <circle style='fill: gray;' cx='39.960' cy='189.960' r='6.000'/></g>
   <g><title>(enc SUPI (pubk HN) SN)</title>
    <circle style='fill: blue;' cx='39.960' cy='114.960' r='6.000'/></g>
   <g>
@@ -4846,10 +4967,10 @@
     (SN SN) (HN HN))
   (defstrand UserEquip 3 (SQN SQN) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
-  (precedes ((0 1) (1 1)) ((1 2) (0 2)))
+  (precedes ((0 2) (1 1)) ((1 2) (0 3)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
-  (operation encryption-test (displaced 2 0 HomeNetwork 2)
+  (operation encryption-test (displaced 2 0 HomeNetwork 3)
     (hash SQN-0 (hash (ltk UE HN) RAND)) (1 1))
   (label 38)
   (parent 36)
@@ -4863,9 +4984,9 @@
 
 <div>
  <svg
-  class='diagram' width='279.840pt' height='454.920pt'
+  class='diagram' width='279.840pt' height='379.920pt'
   xmlns='http://www.w3.org/2000/svg' version='1.1'
-  viewBox='0 0 279.840 454.920' font-size='12.000'>
+  viewBox='0 0 279.840 379.920' font-size='12.000'>
   <defs>
    <marker
     id='arrow' orient='auto' markerWidth='5' markerHeight='10' refX='5'
@@ -4881,7 +5002,7 @@
    x1='139.920' y1='189.960' x2='139.920' y2='339.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <line
-   x1='39.960' y1='114.960' x2='39.960' y2='414.960'
+   x1='39.960' y1='114.960' x2='39.960' y2='339.960'
    style='stroke-width: 0.960; stroke: gray;'/>
   <path
    d='M 239.880 264.960 Q 192.900 264.960 145.920 264.960'
@@ -4902,17 +5023,17 @@
   <g><title>(enc SUPI-0 (pubk HN))</title>
    <circle cx='139.920' cy='189.960' r='6.000'/></g>
   <g>
-   <title>(cat &quot;Success&quot; (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN (hash SQN (hash (ltk UE HN) RAND))) SN) SUPI)</title>
-   <circle cx='39.960' cy='414.960' r='6.000'/></g>
-  <g>
    <title>(hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND))</title>
    <circle style='fill: blue;' cx='39.960' cy='339.960' r='6.000'/></g>
+  <g>
+   <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
+   <circle cx='39.960' cy='264.960' r='6.000'/></g>
   <path
    d='M 39.960 189.960 Q 136.920 152.460 233.880 189.960'
    style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
   <g>
-   <title>(cat RAND (cat (hash SQN (hash (ltk UE HN) RAND)) (hash SQN RAND (ltk UE HN))) (hash (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) RAND))</title>
-   <circle cx='39.960' cy='189.960' r='6.000'/></g>
+   <title>(cat (hash (cat (hash (ltk UE HN) RAND) (hash (ltk UE HN) RAND)) SN RAND (hash (ltk UE HN) RAND)) SUPI)</title>
+   <circle style='fill: gray;' cx='39.960' cy='189.960' r='6.000'/></g>
   <g><title>(enc SUPI (pubk HN) SN)</title>
    <circle style='fill: blue;' cx='39.960' cy='114.960' r='6.000'/></g>
   <g>
@@ -4936,7 +5057,7 @@
   (defstrand UserEquip 3 (SQN SQN-0) (SUPI SUPI-0) (RAND RAND) (UE UE)
     (SN SN) (HN HN))
   (deflistener (cat SQN-0 (hash (ltk UE HN) RAND)))
-  (precedes ((0 1) (2 0)) ((1 2) (0 2)) ((2 1) (1 1)))
+  (precedes ((0 1) (2 0)) ((1 2) (0 3)) ((2 1) (1 1)))
   (non-orig SQN (ltk UE HN))
   (uniq-gen RAND)
   (operation encryption-test

@@ -70,6 +70,7 @@
      (recv (RES* RAND SN (ltk UE HN)))
      (send (cat "Success" (KSEAF RAND SN SQN (ltk UE HN)) SUPI))
      )
+    (fn-of ("ID" (SUPI UE)))
     (uniq-gen RAND)
     (non-orig SQN (ltk UE HN))
     )

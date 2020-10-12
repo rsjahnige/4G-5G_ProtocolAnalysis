@@ -41,7 +41,7 @@
      (recv (cat RAND (AUTN SQN RAND (ltk UE HN))))
      (send (RES* RAND SN (ltk UE HN)))
      )
-    (fn-of ("ID" (SUPI UE)))
+    (fn-of ("ID" (SUPI (cat UE HN))))
     (non-orig (ltk UE HN))
     )
 
@@ -58,7 +58,6 @@
      (send (RES* RAND SN (ltk UE HN)))
      (recv (cat "Success" (KSEAF RAND SN SQN (ltk UE HN)) SUPI))
      )
-    (non-orig SQN (ltk UE HN))
     )
 
   (defrole HomeNetwork
@@ -70,7 +69,7 @@
      (recv (RES* RAND SN (ltk UE HN)))
      (send (cat "Success" (KSEAF RAND SN SQN (ltk UE HN)) SUPI))
      )
-    (fn-of ("ID" (SUPI UE)))
+    (fn-of ("ID" (SUPI (cat UE HN))))
     (uniq-gen RAND)
     (non-orig SQN (ltk UE HN))
     )

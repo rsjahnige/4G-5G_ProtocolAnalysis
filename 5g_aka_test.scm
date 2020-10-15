@@ -42,50 +42,50 @@
      (send (RES* RAND SN (ltk UE HN)))
      )
     (fn-of ("ID" (SUPI (cat UE HN))))
-    (non-orig (ltk UE HN))
+    (non-orig (ltk UE HN) SQN)
     )
 
   (defrole ServingNetwork
     (vars (SUPI RAND data) (UE SN HN name) (SQN text))
     (trace
      (recv (enc SUPI (pubk HN)))
-     (send (cat (enc SUPI (pubk HN)) SN))
-     (recv (cat RAND (AUTN SQN RAND (ltk UE HN)) (HXRES* RAND SN (ltk UE HN))))
-    ;; (init (HXRES* RAND SN (ltk UE HN)))
+     (send (enc (cat (enc SUPI (pubk HN)) SN) (ltk SN HN)))
+     (recv (enc (cat RAND (AUTN SQN RAND (ltk UE HN)) (HXRES* RAND SN (ltk UE HN))) (ltk SN HN)))
      (send (cat RAND (AUTN SQN RAND (ltk UE HN)))) ;; ngKSI, AMF, and ABBA need to be added???
      (recv (RES* RAND SN (ltk UE HN)))
-     ;;(init (HRES* RAND SN (ltk UE HN)))
-     (send (RES* RAND SN (ltk UE HN)))
-     (recv (cat "Success" (KSEAF RAND SN SQN (ltk UE HN)) SUPI))
+     (send (enc (RES* RAND SN (ltk UE HN)) (ltk SN HN)))
+     (recv (enc (cat "Success" (KSEAF RAND SN SQN (ltk UE HN)) SUPI) (ltk SN HN)))
      )
+    (fn-of ("ID" (SUPI (cat UE HN))))
+    (non-orig (ltk SN HN))
     )
 
   (defrole HomeNetwork
     (vars (SUPI RAND data) (UE SN HN name) (SQN text))
     (trace 
-     (recv (cat (enc SUPI (pubk HN)) SN))
-     (init (cat (XRES* RAND SN (ltk UE HN)) SUPI)) ;;store XRES* and SUPI
-     (send (cat RAND (AUTN SQN RAND (ltk UE HN)) (HXRES* RAND SN (ltk UE HN))))
-     (recv (RES* RAND SN (ltk UE HN)))
-     (send (cat "Success" (KSEAF RAND SN SQN (ltk UE HN)) SUPI))
+     (recv (enc (cat (enc SUPI (pubk HN)) SN) (ltk SN HN)))
+     ;;(init (cat (XRES* RAND SN (ltk UE HN)) SUPI)) ;;store XRES* and SUPI
+     (send (enc (cat RAND (AUTN SQN RAND (ltk UE HN)) (HXRES* RAND SN (ltk UE HN))) (ltk SN HN)))
+     (recv (enc (RES* RAND SN (ltk UE HN)) (ltk SN HN)))
+     (send (enc (cat "Success" (KSEAF RAND SN SQN (ltk UE HN)) SUPI) (ltk SN HN)))
      )
     (fn-of ("ID" (SUPI (cat UE HN))))
     (uniq-gen RAND)
-    (non-orig SQN (ltk UE HN))
+    (non-orig SQN (ltk SN HN) (ltk UE HN))
     )
   )
 
 (defskeleton AKA5G
-  (vars (SUPI data) (UE HN name) (SQN text))
-  (defstrandmax UserEquip (SUPI SUPI) (UE UE) (HN HN) (SQN SQN))
+  (vars (SUPI data) (UE SN HN name) (SQN text))
+  (defstrandmax UserEquip (SUPI SUPI) (UE UE) (HN HN) (SN SN) (SQN SQN))
   )
 
 (defskeleton AKA5G
-  (vars (SN name))
-  (defstrandmax ServingNetwork (SN SN))
+  (vars (SUPI data) (SN HN name))
+  (defstrandmax ServingNetwork (SN SN) (HN HN) (SUPI SUPI))
   )
 
 (defskeleton AKA5G
-  (vars (SUPI RAND data) (UE HN name) (SQN text))
-  (defstrandmax HomeNetwork (SUPI SUPI) (RAND RAND) (UE UE) (HN HN))
+  (vars (SUPI RAND data) (UE SN HN name) (SQN text))
+  (defstrandmax HomeNetwork (SUPI SUPI) (RAND RAND) (UE UE) (SN SN) (HN HN) (SQN SQN))
   )

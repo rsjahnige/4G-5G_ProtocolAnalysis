@@ -21,7 +21,7 @@
 
 
 ;;Protocol 4G-EPSAKA 
-(defprotocol AKA5G basic
+(defprotocol AKA4G basic
 
   (defrole UserEquip
     (vars (SUPI RAND data) (UE SN HN name) (SQN text))
@@ -60,17 +60,18 @@
     )
   )
 
-(defskeleton AKA5G
+(defskeleton AKA4G
   (vars (SUPI data) (UE SN HN name) (SQN text))
   (defstrandmax UserEquip (SUPI SUPI) (UE UE) (HN HN) (SN SN) (SQN SQN))
+  (deflistner SUPI)
   )
 
-(defskeleton AKA5G
+(defskeleton AKA4G
   (vars (SUPI data) (SN HN name))
   (defstrandmax ServingNetwork (SN SN) (HN HN) (SUPI SUPI))
   )
 
-(defskeleton AKA5G
+(defskeleton AKA4G
   (vars (SUPI RAND data) (UE SN HN name) (SQN text))
   (defstrandmax HomeNetwork (SUPI SUPI) (RAND RAND) (UE UE) (SN SN) (HN HN) (SQN SQN))
   )

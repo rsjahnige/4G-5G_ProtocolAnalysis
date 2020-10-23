@@ -35,23 +35,24 @@
 (defprotocol AKA5G basic
 
   (defrole UserEquip
-    (vars (SUPI RAND data) (UE SN HN name) (SQN text))
+    (vars (SUPI RAND n data) (UE SN HN name) (SQN text))
     (trace
-     (send (enc SUPI (pubk HN)))
+     (send (enc SUPI n (pubk HN)))
      (recv (cat RAND (AUTN SQN RAND (ltk UE HN))))
      (send (RES* RAND SN (ltk UE HN)))
      )
     (fn-of ("ID" (SUPI (cat UE HN))))
+    (uniq-gen n)
     (non-orig (ltk UE HN) SQN)
     )
 
   (defrole ServingNetwork
-    (vars (SUPI RAND data) (UE SN HN name) (SQN text))
+    (vars (SUPI RAND n data) (UE SN HN name) (SQN text))
     (trace
-     (recv (enc SUPI (pubk HN)))
-     (send (enc (cat (enc SUPI (pubk HN)) SN) (ltk SN HN)))
+     (recv (enc SUPI n (pubk HN)))
+     (send (enc (cat (enc SUPI n (pubk HN)) SN) (ltk SN HN)))
      (recv (enc (cat RAND (AUTN SQN RAND (ltk UE HN)) (HXRES* RAND SN (ltk UE HN))) (ltk SN HN)))
-     (send (cat RAND (AUTN SQN RAND (ltk UE HN)))) ;; ngKSI, AMF, and ABBA need to be added???
+     (send (cat RAND (AUTN SQN RAND (ltk UE HN)))) 
      (recv (RES* RAND SN (ltk UE HN)))
      (send (enc (RES* RAND SN (ltk UE HN)) (ltk SN HN)))
      (recv (enc (cat "Success" (KSEAF RAND SN SQN (ltk UE HN)) SUPI) (ltk SN HN)))
@@ -61,28 +62,27 @@
     )
 
   (defrole HomeNetwork
-    (vars (SUPI RAND data) (UE SN HN name) (SQN text))
+    (vars (SUPI RAND n data) (UE SN HN name) (SQN text))
     (trace 
-     (recv (enc (cat (enc SUPI (pubk HN)) SN) (ltk SN HN)))
-     ;;(init (cat (XRES* RAND SN (ltk UE HN)) SUPI)) ;;store XRES* and SUPI
+     (recv (enc (cat (enc SUPI n (pubk HN)) SN) (ltk SN HN)))
      (send (enc (cat RAND (AUTN SQN RAND (ltk UE HN)) (HXRES* RAND SN (ltk UE HN))) (ltk SN HN)))
      (recv (enc (RES* RAND SN (ltk UE HN)) (ltk SN HN)))
      (send (enc (cat "Success" (KSEAF RAND SN SQN (ltk UE HN)) SUPI) (ltk SN HN)))
      )
     (fn-of ("ID" (SUPI (cat UE HN))))
     (uniq-gen RAND)
-    (non-orig SQN (ltk SN HN) (ltk UE HN))
+    (non-orig SQN (ltk SN HN) (ltk UE HN) (privk HN))
     )
   )
 
 (defskeleton AKA5G
-  (vars (SUPI data) (UE SN HN name) (SQN text))
-  (defstrandmax UserEquip (SUPI SUPI) (UE UE) (HN HN) (SN SN) (SQN SQN))
+  (vars (SUPI n data) (UE SN HN name) (SQN text))
+  (defstrandmax UserEquip (SUPI SUPI) (UE UE) (SN SN) (HN HN) (SQN SQN) (n n))
   )
 
 (defskeleton AKA5G
-  (vars (SUPI data) (SN HN name))
-  (defstrandmax ServingNetwork (SN SN) (HN HN) (SUPI SUPI))
+  (vars (SN HN name))
+  (defstrandmax ServingNetwork (SN SN) (HN HN))
   )
 
 (defskeleton AKA5G

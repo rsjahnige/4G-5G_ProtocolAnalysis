@@ -44,8 +44,8 @@
   (defrole user-init
     (vars (SQN_UE data) (Y_hn base) (UE HN name))
     (trace
-     (recv (enc SQN_UE Y_hn UE (ltk UE HN)))
-     (init (cat "User" SQN_UE Y_hn UE HN)) 
+     (recv (enc SQN_UE Y_hn HN (ltk UE HN)))
+     (init (cat "User" SQN_UE Y_hn UE HN))
      )
     (pen-non-orig SQN_UE)
     )
@@ -53,25 +53,13 @@
   (defrole home-init
     (vars (SQN_UE SQN_HN data) (UE HN name) (X_hn expn))
     (trace
-     (init (cat "Home" SQN_HN X_hn UE HN))
-     (send (enc SQN_UE (exp (gen) X_hn) UE (ltk UE HN)))
+     (init (cat "Home" SQN_UE X_hn UE HN))
+     (send (enc SQN_UE (exp (gen) X_hn) HN (ltk UE HN)))
      )
-    (fn-of ("SQN" (SQN_HN (hash "1" SQN_UE)))) ; sequence number of home network
-    (lt (SQN_UE SQN_HN)) ; SQN_UE < SQN_HN
-    (pen-non-orig SQN_UE SQN_HN)
+    (pen-non-orig SQN_UE)
     (uniq-gen SQN_UE)
     (non-orig X_hn) ; private key of home network
     )
-
-  ;(defrole mal_gNB
-  ;  (vars (SQN_UE SQN_HN RAND n data) (UE SN HN name) (SUPI text))
-  ;  (trace
-  ;   (recv (enc SUPI SQN_UE n (pubk HN)))
-  ;   (send (cat RAND (AUTN SQN_HN RAND (ltk UE HN))))
-  ;   (recv (RES* RAND SN (ltk UE HN)))
-  ;   (send (RES* RAND SN (ltk UE HN)))
-  ;   )
-  ;  )
   
   (defrole UserEquip
     (vars (Y_hn base) (X_ue rndx) (RAND SQN_UE SQN_HN data) (UE SN HN name) (SUPI text))
@@ -84,7 +72,7 @@
     (fn-of ("ID" (SUPI (cat UE HN))))
     (uniq-gen X_ue)
     (non-orig (ltk UE HN) X_ue)
-    (pen-non-orig SQN_UE SQN_HN SUPI)
+    (pen-non-orig SQN_UE SQN_HN SUPI) ; SUPI
     )
 
   (defrole ServingNetwork
@@ -100,7 +88,7 @@
      )
     (fn-of ("ID" (SUPI (cat UE HN))))
     (non-orig (ltk SN HN))
-    (pen-non-orig SUPI)
+    ; (pen-non-orig SUPI)
     )
 
   (defrole HomeNetwork
@@ -113,24 +101,26 @@
      (send (enc (cat "Success" (KSEAF RAND SN SQN_HN (ltk UE HN)) SUPI) (ltk SN HN)))
      )
     (fn-of ("ID" (SUPI (cat UE HN))))
+    (fn-of ("SQN" (SQN_HN (cat "1" SQN_UE)))) ; increment sequence number of UE
+    (lt (SQN_UE SQN_HN)) ; SQN_UE < SQN_HN
     (uniq-gen RAND)
     (non-orig (ltk SN HN) (ltk UE HN) X_hn)
-    (pen-non-orig SQN_HN SUPI)
+    (pen-non-orig SQN_HN SUPI) ; SUPI
     )
   )
 
+(defskeleton AKA5G
+  (vars (Y_hn base) (UE HN name) (SUPI text))
+  (defstrandmax UserEquip (Y_hn Y_hn) (SUPI SUPI) (UE UE) (HN HN))
+  (deflistener SUPI)
+  )
+
 ;(defskeleton AKA5G
-;  (vars (Y_hn base) (UE HN name) (SUPI text))
-;  (defstrandmax UserEquip (Y_hn Y_hn) (SUPI SUPI) (UE UE) (HN HN))
-;  ;(defstrandmax mal_gNB)
+;  (vars (SN HN name))
+;  (defstrandmax ServingNetwork (SN SN) (HN HN))
 ;  )
 
-(defskeleton AKA5G
-  (vars (SN HN name))
-  (defstrandmax ServingNetwork (SN SN) (HN HN))
-  )
-
-(defskeleton AKA5G
-  (vars (RAND data) (X_hn expn) (UE SN HN name) (SUPI text))
-  (defstrandmax HomeNetwork (SUPI SUPI) (X_hn X_hn) (RAND RAND) (UE UE) (SN SN) (HN HN))
-  )
+;(defskeleton AKA5G
+;  (vars (RAND data) (X_hn expn) (UE SN HN name) (SUPI text))
+;  (defstrandmax HomeNetwork (SUPI SUPI) (X_hn X_hn) (RAND RAND) (UE UE) (SN SN) (HN HN))
+;  )
